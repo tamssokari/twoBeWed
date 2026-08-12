@@ -15,6 +15,7 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | D-007 | **Policy: drawdown cost basis = `actual`** | 2026-08-12 | Cap drawdowns on cost `actual` (amount from vendor invoice/receipt **received**). If `actual` unset, no draw against that cost until receipted (or override). Prefer not to use bare `committed` as spendable basis |
 | D-008 | **Policy: `autoDraftDepositFromOffering` = true** | 2026-08-12 | Attaching an offering with a deposit schedule auto-creates a **draft** ClientInvoice; planner still issues manually |
 | D-009 | **Policy: `coordinatorCanReadMoney` = false** | 2026-08-12 | Coordinators do not see budgets, client invoices, cost-plus margins, or drawdown/A/R. **Exception:** day-of cash (D-010) |
+| D-010 | **Policy: `coordinatorCanManageDayOfCash` = true** | 2026-08-12 | Coordinators manage day-of float: (1) petty cash/float issued, (2) COD/tip payouts from float, (4) end-of-day reconciliation. Not guest cash intake. Scoped to event day(s), not full ledger |
 | D-011 | **v1 includes drawdowns** | 2026-08-12 | Planner control loop: cleared milestones + actual costs + budget; not deferred |
 | D-012 | **v1 offline split** | 2026-08-12 | Ops local-first; Billing + ClientFunds online-authoritative |
 | D-013 | **v1 policy = flat ResolvedPolicy** | 2026-08-12 | No multi-scope policy merge engine until second tenant |
@@ -36,7 +37,6 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 
 ## Doc follow-ups queued after opens resolve
 
-- Acceptance journeys + smoke list
-- Hypeluxe fixture pack outline (incl. policy pack reflecting D-004…D-010)
+- Hypeluxe fixture pack outline (policy D-004…D-010 + journey fixtures)
 - Host money visibility (O-005) once chosen
 - Security retention defaults once Hypeluxe agrees
