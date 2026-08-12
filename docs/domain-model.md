@@ -2,25 +2,31 @@
 
 This document defines the target domain for the new platform. It deliberately generalizes the legacy TwoBeWed models (`user`, `client`, `vendor`).
 
+**Related:** [state-machines.md](./state-machines.md) (legal status transitions), [identity-and-access.md](./identity-and-access.md) (users, parties, RBAC), [audit-and-attribution.md](./audit-and-attribution.md).
+
 ## Core entities
 
 ```text
 Workspace
+  ├── Member[]  (User + role)
+  ├── Vendor[]  (catalog)
   └── Event[]
         ├── Schedule (kind + units)
         ├── Stakeholder[]
+        ├── Party[]
         ├── Guest[]
-        │     └── LogisticsProfile (travel, stays, transfers, local moves)
-        ├── AccommodationBlock[]     (room blocks / hotels)
-        ├── TransferPlan[]           (pickup / dropoff waves)
+        ├── TravelLeg[]              // first-class rows (not only nested JSON)
+        ├── Stay[]
+        ├── AccommodationBlock[]
+        ├── Movement[]               // arrival | departure | local
+        ├── TransferPlan[]           // optional grouping of movements
         ├── VendorAssignment[]
         ├── Offering / Package (optional)
         ├── Task[] / Checklist
         └── Note[]
-
-Vendor (workspace-scoped catalog)  // includes hotels, transport, DMCs, …
-OfferingTemplate / EventTypeTemplate (tenant packs)
 ```
+
+`LogisticsProfile` in earlier drafts meant “the set of logistics rows for a guest,” not a nested document blob. **Source of truth is relational:** `TravelLeg`, `Stay`, `Movement` reference `guestId` / `guestIds` / `partyId`.
 
 ### Workspace
 
@@ -35,17 +41,27 @@ A planned occasion owned by a workspace. Not inherently a wedding.
 | `id`, `workspaceId` | Identity |
 | `title` | Display name |
 | `eventTypeId` | References a template (destination wedding, multi-day conference, gala, …) |
-| `status` | draft / active / completed / archived |
+| `status` | FSM: `draft` → `active` → `completed` / `archived` — see state machines |
 | `schedule` | See below |
-| `destination` (optional) | City/region/country + primary timezone; critical for destination events |
-| `location` (optional summary) | Legacy-friendly summary; detailed venues live on schedule units |
-| `offering` | Selected package + extras |
+| `destination` | Optional **trip destination** (city/region/country + default timezone). Used for destination weddings/conferences |
+| `offering` | Selected package + extras (commercial metadata only in v1 — **no money ledger**) |
 | `stakeholders` | Decision-makers / hosts (not the full guest list) |
-| `guests` | Attendees managed for ops + logistics |
-| `accommodationBlocks` | Hotels / room blocks for the event |
-| `transferPlans` | Coordinated pickup/dropoff waves |
-| `vendorAssignments` | Links to catalog vendors with role/notes |
+| `parties`, `guests` | Attendance + hospitality |
+| `accommodationBlocks`, `stays`, `travelLegs`, `movements` | Logistics |
+| `transferPlans` | Optional waves grouping movements |
+| `vendorAssignments` | Links to catalog vendors |
 | `tasks`, `notes` | Operational content |
+
+**Location model (single story):**
+
+| Concept | Role |
+|---|---|
+| `Event.destination` | Where the *trip* is (macro). Optional for local single-venue events |
+| `ScheduleUnit.venue` | Where a *day/session* happens |
+| `TimeBlock.venue` (optional override) | Where a *block* happens if different from the unit |
+| Movement `from` / `to` | Where people *move* (airport, hotel, venue refs) |
+
+There is **no** separate legacy `location` summary field — derive display summaries from `destination` + primary venue.
 
 **Representative event types (templates):** destination wedding, local wedding weekend, multi-day conference, corporate offsite, private gala.
 
@@ -58,16 +74,16 @@ type ScheduleKind = "single_day" | "multi_day"
 
 type Schedule = {
   kind: ScheduleKind
-  timezone: string
-  units: ScheduleUnit[] // ordered
+  timezone: string          // usually aligns with destination timezone when set
+  units: ScheduleUnit[]     // ordered
 }
 
 type ScheduleUnit = {
   id: string
-  label: string           // "Main day", "Welcome dinner", "Day 2", "Keynotes"
-  date: string            // calendar date in event timezone
+  label: string             // "Main day", "Welcome dinner", "Day 2", "Keynotes"
+  date: string              // calendar date in schedule timezone
   venue?: VenueRef
-  blocks?: TimeBlock[]    // ceremony, session track, breakout, dinner, …
+  blocks?: TimeBlock[]      // ceremony, session track, breakout, dinner, …
 }
 ```
 
@@ -86,7 +102,14 @@ Future kinds (not required for v1): recurring series, open-ended / TBA dates wit
 | Purpose | Ownership, approvals, commercial relationship | Attendance, hospitality, logistics |
 | Cardinality | Few | Often dozens to hundreds+ |
 
-Roles are configurable per event type (e.g. “bride/groom” vs “delegate/speaker”).
+Roles/labels are configurable per event type (e.g. “bride/groom” vs “delegate/speaker”).
+
+### Party
+
+Household or travelling group. See [identity-and-access.md](./identity-and-access.md).
+
+- `primaryGuestId` + `guestIds`
+- Stays/movements may target a party (expanded to members)
 
 ### Guest management
 
@@ -94,107 +117,87 @@ Guests are first-class event records—not a bolt-on spreadsheet.
 
 | Field (conceptual) | Notes |
 |---|---|
-| Identity | Name, contact, household/party grouping, dietary, accessibility |
-| Invitation / RSVP | invited → responded → attending / declined / waitlist (ops RSVP, not public ticket sales) |
-| Party | Link +1s / family / shared roommates |
+| Identity | Name, contact, dietary, accessibility |
+| `partyId?` | Optional party membership |
+| Invitation / RSVP | FSM: `invited` \| `attending` \| `declined` \| `waitlist` |
 | Tags | VIP, speaker, vendor-as-guest, staff |
-| LogisticsProfile | Nested or related travel/stay/transfer/local legs (below) |
+| `userId?` | Optional link when guest portal exists |
 
-Planners need list/filter views: arrivals by day, missing flights, unassigned pickups, hotel unassigned, etc.
+**Derived gap flags (queries, not stored statuses):** missing inbound travel, no stay, unassigned arrival pickup, etc. — typically only for `attending` guests.
 
-### Logistics (travel, stays, transfers, local)
+### Logistics
 
-Logistics are **structured ops records** attached to guests (and sometimes to event-level plans). The platform **tracks and coordinates** bookings; it does not replace airline GDSs or hotel PMS inventory.
+The platform **tracks and coordinates** bookings and confirmations; it does **not** replace airline GDSs or hotel PMS inventory systems.
 
-#### Long-haul / arrival travel (`TravelLeg`)
+#### TravelLeg
 
-Flights, trains, coaches into the destination (and departures home).
+Inbound/outbound long-haul (or intercity) legs. Status FSM includes `planned`, `booked`, `checked_in`, `delayed`, `completed`, `cancelled`.
 
-```ts
-type TravelLeg = {
-  guestId: string
-  direction: "inbound" | "outbound"
-  mode: "flight" | "train" | "bus" | "other"
-  carrier?: string
-  flightOrNumber?: string
-  from: LocationRef
-  to: LocationRef
-  departAt?: DateTime
-  arriveAt?: DateTime
-  confirmationCode?: string
-  status: "planned" | "booked" | "checked_in" | "completed" | "cancelled"
-}
-```
+#### AccommodationBlock + Stay
 
-#### Accommodations (`Stay` + `AccommodationBlock`)
+- **AccommodationBlock** — event-level hotel/villa room block: vendor link, date range, **allotment** (rooms reserved), optional overbook policy.
+- **Stay** — guest/party room assignment within a block or ad-hoc property. Status FSM includes `no_show`.
 
-- **AccommodationBlock** — event-level hotel/villa room block (vendor link, dates, allotment).
-- **Stay** — guest (or party) room assignment within a block or ad-hoc property.
+Allotment math: confirmed stays consume block capacity; waitlist/overbook behavior is tenant policy.
+
+#### Movement (unified transfer + local)
+
+Replaces separate Transfer / LocalMove types.
 
 ```ts
-type Stay = {
-  guestIds: string[]      // room sharers
-  propertyId: string      // vendor or block
-  checkIn: Date
-  checkOut: Date
-  roomType?: string
-  confirmationCode?: string
-  status: "requested" | "confirmed" | "checked_in" | "checked_out" | "cancelled"
-}
-```
-
-#### Pickups / dropoffs (`Transfer`)
-
-Airport ↔ hotel ↔ venue waves; may be individual or shared vehicles.
-
-```ts
-type Transfer = {
+type Movement = {
+  id: string
+  eventId: string
+  scope: "arrival" | "departure" | "local"
+  kind?: "pickup" | "dropoff" | "point_to_point" | "shuttle"  // UI hint
   guestIds: string[]
-  kind: "pickup" | "dropoff" | "point_to_point"
+  partyId?: string
   from: LocationRef
   to: LocationRef
   windowStart: DateTime
   windowEnd?: DateTime
   vehicleOrVendorId?: string
-  linkedTravelLegId?: string  // e.g. meet flight XY123
+  linkedTravelLegId?: string
+  transferPlanId?: string
   status: "planned" | "assigned" | "en_route" | "completed" | "no_show" | "cancelled"
 }
 ```
 
-**TransferPlan** groups transfers into waves (e.g. “Thursday AM arrivals”) for dispatcher-style views.
+**TransferPlan** groups movements into waves (e.g. “Thursday AM arrivals”) for dispatcher views.
 
-#### Local travel (`LocalMove`)
+### Vendor + VendorAssignment
 
-In-destination movement that is not a primary airport transfer: hotel → venue shuttles, island boats, group coaches between conference hotels, dinner transport.
-
-Same shape as `Transfer` with `kind` / tags distinguishing **local** loops from arrival/departure transfers—or a shared `Movement` type with `scope: "arrival" | "departure" | "local"`.
-
-### Vendor
-
-Workspace catalog entry: name, contacts, location, notes, past event links. Categories include venues, hotels, transport, DMC, AV, catering, etc. Assigned to events via `VendorAssignment`.
+Workspace catalog (venues, hotels, transport, DMC, AV, catering, …). Assignments have their own FSM (`proposed` → `confirmed` → `completed` / `cancelled`).
 
 ### Offering / package
 
-Commercial shape attached to an event (main package + extras). Templates come from the tenant pack (Hypeluxe packages) but storage remains generic.
+Commercial **metadata** attached to an event. **No payments, deposits, or invoices in v1** (explicitly deferred).
 
 ### Task & note
 
-Operational work items and freeform notes. Strong candidates for CRDT or careful merge policies under local-first sync.
+- **Task** — FSM: `open` → `in_progress` → `done` / `cancelled`
+- **Note** — freeform; collaborative editing may use CRDT; audit as revision commits, not keystrokes
+
+### Documents & communications (deferred)
+
+Passport scans, contracts, email/SMS invite blasts — **out of v1** unless Hypeluxe pulls them forward. RSVP may be planner-entered.
 
 ## Mapping from legacy TwoBeWed
 
 | Legacy | Target |
 |---|---|
-| `user` | Workspace member (planner/producer) |
+| `user` | User + WorkspaceMember |
 | `client` (+ `weddingDate`) | `Event` + `Schedule` + stakeholders |
 | `vendor` | `Vendor` + assignments |
-| _(none)_ | `Guest` + logistics (travel, stay, transfer, local) |
+| _(none)_ | Party, Guest, TravelLeg, Stay, Movement, AuditRecord |
 | `@twobewed.com` email rule | Tenant auth policy (not global) |
 
 ## Invariants
 
 1. Every event belongs to exactly one workspace.
-2. Every event has a schedule with `kind` and at least one unit once dates are set (drafts may allow empty/TBA with explicit status).
-3. Guests belong to exactly one event; logistics records reference guests (or event-level blocks/plans).
-4. Vertical language (“bride”, “delegate”, “ceremony”) lives in templates and UI copy, not required core fields.
-5. Destination is optional metadata; logistics may still exist for non-destination events (e.g. local shuttles).
+2. Every event has a schedule with `kind`; once dates are set, ≥1 unit (drafts may allow TBA with explicit flag).
+3. Guests belong to exactly one event; a guest is in at most one party (v1).
+4. Logistics rows reference the event and guest(s)/party; confirmation codes are stored on legs/stays when known.
+5. Status changes only via documented state-machine commands.
+6. Vertical language lives in templates/UI copy, not required core fields.
+7. Meaningful commands append audit records with offline-safe actor stamps.

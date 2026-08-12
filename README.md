@@ -26,6 +26,9 @@ Build a fully functional, **event-agnostic** platform (single-day, multi-day, de
 |---|---|
 | [docs/VISION.md](docs/VISION.md) | Product vision and principles |
 | [docs/domain-model.md](docs/domain-model.md) | Event-agnostic domain |
+| [docs/state-machines.md](docs/state-machines.md) | Status FSMs and commands |
+| [docs/audit-and-attribution.md](docs/audit-and-attribution.md) | Who/when/what audit trail |
+| [docs/identity-and-access.md](docs/identity-and-access.md) | Users, parties, RBAC |
 | [docs/architecture.md](docs/architecture.md) | EffectTS, local-first, CD |
 | [docs/customers/hypeluxe.md](docs/customers/hypeluxe.md) | First customer use case |
 | [docs/roadmap.md](docs/roadmap.md) | Incremental milestones |

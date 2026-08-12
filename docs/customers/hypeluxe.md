@@ -24,23 +24,26 @@ Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …
 2. **Multi-day / destination wedding** — welcome → main day → farewell as schedule units; guests flying in; hotel room block; airport pickups/dropoffs; local shuttles between hotel and venues.
 3. **Guest management** — invite/RSVP status, parties/+1s, tags (VIP), dietary/accessibility; planner filters for “missing inbound flight” / “no hotel” / “unassigned pickup”.
 4. **Travel & stays** — track inbound/outbound legs and stays against an accommodation block (confirmations, not GDS booking).
-5. **Transfers & local travel** — arrival pickups linked to flights; departure dropoffs; local venue loops.
+5. **Transfers & local travel** — unified **movements** (`arrival` / `departure` / `local`); arrival pickups linked to flights; hotel↔venue shuttles.
 6. **Multi-day conference (platform proof)** — multi-day schedule units (sessions), delegate guest list, conference hotels, airport transfers, hotel↔venue shuttles — same schemas as destination wedding logistics.
-7. **Planner portfolio** — list/filter events by status and date; day-of logistics boards offline-capable.
+7. **Planner portfolio** — list/filter events by status and date; day-of logistics boards offline-capable; activity trail for attribution.
 8. **Vendor roster** — hotels, transport partners, venues reused across events.
 
 ## Success for Hypeluxe pilot
 
 - Planner can run arrival day and day-of with poor connectivity and reconcile later
 - Destination multi-day itineraries do not require fake “extra events”
-- Guest travel / hotel / transfer gaps are visible without leaving the event
+- Guest travel / hotel / movement gaps are visible without leaving the event
 - Conference-shaped logistics reuse the same guest + movement model
+- Status changes follow FSMs; actions are attributable (who changed what)
 - Switching UI language/templates does not require engineering changes to core schemas
 
 ## Out of scope for pilot
 
 - Public couple-facing marketing site
 - Open ticket sales / marketplace
-- Automated airline or hotel booking engines (track confirmations only)
+- Automated airline or hotel **booking engines** (confirmation **tracking** is in scope)
+- Payments / deposits / invoicing
+- Document vault and email/SMS blast platform
 - Full seating-chart product (guest list + parties first)
 - Vendor self-serve portal (unless explicitly pulled forward)
