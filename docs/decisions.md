@@ -11,6 +11,7 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | D-003 | **Hosting: machineaid product** | 2026-08-12 | machineaid operates staging/prod; Hypeluxe is a tenant/customer |
 | D-004 | **Policy: `allowLogisticsBeforeRsvp` = false** | 2026-08-12 | Hypeluxe default: logistics only when GuestRsvp is `attending` |
 | D-005 | **Policy: `requireFlightLinkForAirportPickup` = true** | 2026-08-12 | Arrival airport pickups must link a TravelLeg before AssignMovement |
+| D-006 | **Policy: drawdown funds = `cleared` only** | 2026-08-12 | `recorded` = client claim; `cleared` = planner/host acknowledged receipt. Only cleared counts toward available funds |
 
 ## Open (need input)
 
@@ -24,7 +25,6 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | O-006 | Seating / floor plans | out / thin wedge |
 | O-007 | Documents | out / upload+tag only |
 | O-008 | Notifications | out / in-app only |
-| O-011 | Drawdown funds | `recorded` / `cleared` |
 | O-012 | Drawdown cost basis | `committed` / `actual` |
 | O-013 | Auto-draft deposit invoice | yes / no |
 | O-014 | Coordinator sees money | yes / no |

@@ -81,7 +81,7 @@ type PolicyDocument = {
 | Area | Examples (data, not code branches) |
 |---|---|
 | Logistics | `allowLogisticsBeforeRsvp`, `requireFlightLinkForAirportPickup` |
-| Money | `paymentFundsAvailableAt: "cleared" \| "recorded"`, `drawdownBasis: "actual" \| "committed"`, `costPlusDefaults`, markup-eligible categories |
+| Money | `paymentFundsAvailableAt: "cleared"` (D-006), `drawdownBasis: "actual" \| "committed"`, `costPlusDefaults`, markup-eligible categories |
 | Visibility | `coordinatorCanReadMoney`, `hostSeesMargins`, `hostSeesOwnInvoicesOnly` |
 | Invoicing | `autoDraftDepositFromOffering`, `requireCommercialSnapshotOnIssue` |
 | Capacity | waitlist enabled, room-block overbook rule |

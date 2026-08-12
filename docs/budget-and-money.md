@@ -214,12 +214,13 @@ type ClientPayment = {
   method?: "wire" | "cheque" | "card" | "cash" | "other"
   receivedOn: Date
   status: "recorded" | "cleared" | "reversed"
+  // recorded = client claim; cleared = planner/host acknowledged receipt (D-006)
   externalRef?: string       // bank ref / Stripe id later
   notes?: string
 }
 ```
 
-v1: planners **record** payments and **apply** them to invoices by hand. Payment processing and automatic sync with processors/accounting are a **future** case — and when added, they call these same commands (see [Manual first, automation later](#manual-first-automation-later)).
+v1: planners **record** payments and **apply** them to invoices by hand. Only **`cleared`** payments count toward drawdown available funds (D-006). Payment processing and automatic sync with processors/accounting are a **future** case — and when added, they call these same commands (see [Manual first, automation later](#manual-first-automation-later)).
 
 ## Drawdowns
 

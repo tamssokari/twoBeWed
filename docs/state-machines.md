@@ -180,7 +180,7 @@ Amounts may be updated via `ReviseCostAmounts` without changing status when stil
 | `recorded` | `ClearClientPayment` | `cleared` | — |
 | `recorded` \| `cleared` | `ReverseClientPayment` | `reversed` | applications voided/reversed **or** override |
 
-`cleared` counts toward available funds for drawdowns (tenant may treat `recorded` as available — default: only `cleared`).
+`cleared` counts toward available funds for drawdowns (Hypeluxe default D-006). **`recorded`** means the client claims payment was sent; **`cleared`** means planner/host has acknowledged receipt. Do not treat `recorded` as spendable.
 
 `ApplyPaymentToInvoice` / `UnapplyPayment` are commands on applications (not payment status changes); they update invoice `amountApplied` / status.
 
@@ -246,9 +246,9 @@ const assignMovement = (id: MovementId, vehicleId: VehicleId) =>
 ## Open product knobs
 
 - ~~Allow logistics commands while GuestRsvp = `invited`?~~ → **No** (D-004)
-- Require travel-leg link for airport arrival pickups?
+- ~~Require travel-leg link for airport arrival pickups?~~ → **Yes** (D-005)
 - Driver role for `StartMovement`, or planner-only in Hypeluxe pilot?
-- Client payment: do `recorded` funds count before `cleared`?
+- ~~Client payment: do `recorded` funds count before `cleared`?~~ → **No — cleared only** (D-006); recorded = client claim, cleared = receipt acknowledged
 - Drawdown basis against cost `committed` vs `actual`?
 - Can `host` see full cost-plus margins or only their invoices / balance due?
 - Auto-issue deposit invoices from offering templates vs manual draft only?
