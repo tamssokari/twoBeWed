@@ -22,6 +22,21 @@ Rebuild (do not retrofit) on top of the TwoBeWed prototype. The legacy Express +
 ```
 
 Domain commands run through **state machines** and append **audit** records (actor stamped on device for offline).
+
+**Also see:** [platform-engineering.md](./platform-engineering.md) — policy as data, functional core / imperative shell, CD, observability.
+
+## Functional core / imperative shell (summary)
+
+| Layer | Responsibility |
+|---|---|
+| **Core** (`packages/domain`) | Schemas, FSMs, policy evaluation, command decisions — no SQL/HTTP/UI imports |
+| **Shells** (`client`, `server`, future integrations) | I/O via Effect Layers implementing ports |
+
+UI and (later) Stripe/QuickBooks adapters are shells that **only** call core commands.
+
+## Policy as data (summary)
+
+Product rules (`allowLogisticsBeforeRsvp`, funds availability, host money visibility, etc.) live in **versioned policy documents**, not `if (tenant === …)` branches. Tenant packs ship defaults; workspaces override. Details in [platform-engineering.md](./platform-engineering.md#policy-as-data).
 ## EffectTS spine
 
 Use Effect on client and server for:
@@ -61,20 +76,29 @@ Decision still open: pure SQL-sync vs CRDT vs hybrid — lock before implementat
 
 ## Continuous delivery
 
-1. **PR:** typecheck, unit tests (Effect + test Layers + FSM transition tables), schema migration dry-run, Playwright smoke
-2. **Main → staging:** deploy immutable artifact; smoke includes offline create → online sync + audit actor preserved
-3. **Prod:** promote the same artifact; feature-flag sync protocol / schema generation
+See full pipeline in [platform-engineering.md](./platform-engineering.md#continuous-delivery).
+
+1. **PR:** typecheck, unit tests (Effect + test Layers + FSM + policy fixtures), schema migration dry-run, Playwright smoke
+2. **Main → staging:** deploy **immutable** artifact; smoke includes offline→online sync, manual invoice/payment, audit actor preserved
+3. **Prod:** promote the **same** artifact; feature flags / policy for risky behavior
 4. **Migrations:** versioned; clients tolerate N−1 local schema
+5. **Gate:** no payment-processor auto-sync until manual money commands pass staging smoke
+
+## Observability
+
+Audit ≠ ops telemetry. Require OpenTelemetry-style **traces/metrics**, structured **logs** in shells, and `correlationId` linking them to audit. Details and SLO starters in [platform-engineering.md](./platform-engineering.md#observability).
 
 ## Proposed monorepo layout (machineaid repo)
 
 ```text
 packages/
-  domain/          # Effect schemas, FSMs, pure use cases, Audit service interface
-  client/          # UI + local DB + sync adapter
-  server/          # Auth, authz, sync, audit persistence, admin APIs
-  sync/            # Shared sync protocol types + correlation ids
-  tenant-hypeluxe/ # Templates, copy, default packages
+  domain/             # functional core: schemas, FSMs, commands, policy eval ports
+  policy/             # PolicyBody schemas + pack defaults (or under domain/)
+  client/             # UI + local DB + sync fiber (imperative shell)
+  server/             # Auth, RPC, Postgres, audit persistence (imperative shell)
+  sync/               # Shared sync protocol types + correlation ids
+  observability/      # tracing/metrics helpers (optional package)
+  tenant-hypeluxe/    # templates + default policy data (not forked core)
 ```
 
 ## Explicit non-goals for architecture v1

@@ -37,7 +37,7 @@ Workspace
 
 ### Workspace
 
-Tenant boundary for an agency, producer, or brand (e.g. Hypeluxe). Holds members, roles, vendor catalog, and enabled event-type templates.
+Tenant boundary for an agency, producer, or brand (e.g. Hypeluxe). Holds members, roles, vendor catalog, enabled event-type templates, and **policy documents** (see [platform-engineering.md](./platform-engineering.md#policy-as-data)).
 
 ### Event
 

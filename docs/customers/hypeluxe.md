@@ -15,8 +15,9 @@ The same core also has to prove it can express **multi-day conferences** (even i
 | Default checklists | Vendor booking, room-block lock, arrival manifest, timeline lock, day-of run of show |
 | Package catalog | Main offerings + extras Hypeluxe sells |
 | Roles / language | Planner, couple, family liaison, VIP guest (labels only) |
+| Default **policy** | Logistics-before-RSVP knobs, money visibility, drawdown basis — as data, not forks |
 
-Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …; Hypeluxe configures how those feel in the product.
+Core storage remains `Event` + `Schedule` + `Guest` + logistics + money + …; Hypeluxe configures how those feel in the product via templates **and policy documents**.
 
 ## Use cases to support first
 

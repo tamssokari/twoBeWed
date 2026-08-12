@@ -29,8 +29,11 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 7. **Audit & attribution** — Meaningful actions record who/when/what, including offline actors (see audit doc).
 8. **Local-first UX** — Reads and writes hit a local store first; sync is background. Venue Wi‑Fi and travel days are unreliable; the product must still work.
 9. **EffectTS everywhere it matters** — Typed errors, composable services, and swappable Layers for local DB, sync, and auth.
-10. **Continuous delivery** — Main always produces a deployable artifact; staging smoke tests include offline → online sync.
-11. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, and event-type packs are tenant-scoped.
+10. **Functional core / imperative shell** — Domain decisions in a pure core; I/O and frameworks only in shells ([platform-engineering.md](./platform-engineering.md)).
+11. **Policy as data** — Tenant/workspace rules are versioned documents evaluated by the core, not hard-coded tenant branches.
+12. **Continuous delivery** — Main always produces a deployable artifact; staging smoke must pass before prod promote.
+13. **Observability** — Traces, metrics, structured logs, correlated with audit via `correlationId`.
+14. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, policy packs, and event-type templates are tenant-scoped.
 
 ## Who it’s for
 
@@ -60,5 +63,6 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 - Run **destination** and **conference** style events with guest travel, accommodations, and movements on the same core model
 - Track **budget vs costs**, **client invoices (A/R)**, **payments**, and **drawdowns** under cost-plus (or flat-fee) terms
 - Illegal status transitions are rejected; successful commands are **attributable** in an activity trail
-- Onboard **Hypeluxe** as a tenant with destination-wedding templates without changing core tables
-- Ship to staging via CD on every main merge
+- Product rules are expressed as **policy data**; Hypeluxe is a pack, not a fork
+- Core logic is testable without UI/DB; shells are replaceable Layers
+- Ship to staging via CD on every main merge; smoke includes offline→online + manual billing path; basic observability on the command path

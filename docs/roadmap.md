@@ -7,14 +7,16 @@ Effort is described by **subsystem scope**, not calendar duration.
 - [x] Vision, domain, architecture, Hypeluxe brief
 - [x] State machines, audit/attribution, identity/RBAC/Party
 - [x] Budget, cost-plus, client invoices, payments, drawdowns
+- [x] Platform engineering: policy as data, functional core/shell, CD, observability
 - [ ] Create private repo under `machineaid` (requires org write access; blocked for this agent)
 - [ ] Point Cursor / CI at the new repo; treat these docs as the initial import
 
 ## Phase 1 — Domain skeleton
 
-- Effect Schema for Workspace, Member, Event, Schedule, Stakeholder, Party, Guest, TravelLeg, Stay, AccommodationBlock, Movement, Budget, Cost, ClientInvoice, PaymentApplication, ClientPayment, Drawdown, CommercialTerms, Vendor, VendorAssignment, Task, AuditRecord
+- Effect Schema for Workspace, Member, Event, Schedule, Stakeholder, Party, Guest, TravelLeg, Stay, AccommodationBlock, Movement, Budget, Cost, ClientInvoice, PaymentApplication, ClientPayment, Drawdown, CommercialTerms, Vendor, VendorAssignment, Task, AuditRecord, **PolicyDocument**
 - FSM modules + unit tests for illegal vs legal transitions (incl. money machines)
-- In-memory repos; `Audit` buffer in tests
+- Policy evaluator + Hypeluxe default policy fixtures
+- In-memory repos; `Audit` buffer in tests (functional core only)
 - Hypeluxe template JSON (destination wedding + sample multi-day conference)
 
 **Risk:** locking schedule + logistics shapes too early — validate with destination wedding *and* conference examples.
@@ -48,11 +50,13 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 **Note:** Do not start payment-processor or accounting auto-sync in this phase.
 
-## Phase 5 — Continuous delivery hardening
+## Phase 5 — Continuous delivery + observability hardening
 
-- Staging auto-deploy from main
-- Playwright: offline event create, multi-day edit, guest travel + movement assign, issue invoice + record payment, drawdown, sync + audit assert
+- Staging auto-deploy from main; promote same artifact to prod
+- Playwright smoke gate (offline event, multi-day, logistics, invoice+payment+drawdown, audit)
 - Schema migration discipline (N−1 clients)
+- OTel traces/metrics on command + sync path; `correlationId` end-to-end
+- Policy pack activation tested in CI (schema validate Hypeluxe defaults)
 
 ## Explicitly deferred (unless pulled forward)
 
