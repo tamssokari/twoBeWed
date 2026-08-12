@@ -80,9 +80,13 @@ Denied attempts may be security-logged; they do not create domain audit success 
 
 ## Authn (mechanism)
 
-- Cloud sessions or short-lived access token + refresh.
+**Pilot requirement:** SSO and/or **passwordless** via a reputable provider (OIDC SSO, magic link, and/or passkeys). **Do not** build a custom password+MFA stack — MFA should come from the IdP or passwordless factors.
+
+- Cloud sessions or short-lived access token + refresh after IdP assertion.
 - Workspace membership resolved on each command (cached in local DB for offline).
 - **Offline:** device may execute commands only if a member session was established and cached capabilities allow; on sync, server re-checks role at `atServer` and may reject with authz error (audited as rejected).
+
+See [security-and-compliance.md](./security-and-compliance.md).
 
 ## Guest self-serve (later)
 
@@ -97,6 +101,6 @@ When enabled: Guest record links `userId`; that user gets `guest` role **scoped 
 | **Documents** | No passport/contract vault in v1 (note as Hypeluxe follow-on) |
 | **Communications** | No built-in email/SMS blast in v1; RSVP may be planner-entered; intake channel TBD |
 | **Vendor login** | Not in pilot |
-| **SSO / SAML** | Not required for pilot |
+| **Homegrown MFA** | Out — use SSO/passwordless provider factors instead |
 
 Deferred does not mean “never”; it means out of early phases unless Hypeluxe pulls it forward.

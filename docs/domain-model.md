@@ -10,6 +10,7 @@ This document defines the target domain for the new platform. It deliberately ge
 Workspace
   ├── Member[]  (User + role)
   ├── Vendor[]  (catalog)
+  ├── PolicyDocument[]       // versioned rules as data
   └── Event[]
         ├── Schedule (kind + units)
         ├── Stakeholder[]

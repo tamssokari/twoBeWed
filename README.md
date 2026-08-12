@@ -33,6 +33,8 @@ Build a fully functional, **event-agnostic** platform (single-day, multi-day, de
 | [docs/identity-and-access.md](docs/identity-and-access.md) | Users, parties, RBAC |
 | [docs/architecture.md](docs/architecture.md) | EffectTS, local-first, CD summary |
 | [docs/platform-engineering.md](docs/platform-engineering.md) | Policy as data, core/shell, CD, observability |
+| [docs/security-and-compliance.md](docs/security-and-compliance.md) | PIPEDA/GDPR, SSO/passwordless, machineaid hosting |
+| [docs/decisions.md](docs/decisions.md) | Decided vs open calls |
 | [docs/customers/hypeluxe.md](docs/customers/hypeluxe.md) | First customer use case |
 | [docs/roadmap.md](docs/roadmap.md) | Incremental milestones |
 

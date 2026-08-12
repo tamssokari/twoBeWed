@@ -4,7 +4,7 @@
 
 **Hypeluxe is the first customer use case**, not the name of the platform. They exercise the event-agnostic core through a tenant pack focused on luxury and destination celebrations — including single-day, multi-day, and **destination** itineraries with full guest logistics.
 
-The same core also has to prove it can express **multi-day conferences** (even if Hypeluxe’s primary vertical is weddings/celebrations), so templates stay data-driven.
+Hypeluxe is a **customer tenant** on the machineaid-hosted product (not a separately hosted fork).
 
 ## What “tenant pack” means
 

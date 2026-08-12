@@ -69,10 +69,11 @@ Decision still open: pure SQL-sync vs CRDT vs hybrid — lock before implementat
 
 ## Auth & tenancy
 
-- Cloud issues sessions or short-lived tokens + refresh
+- **Authn:** SSO and/or passwordless out of the gate (no homegrown MFA) — [security-and-compliance.md](./security-and-compliance.md)
 - Authorization is workspace-scoped RBAC with command-level checks ([identity-and-access.md](./identity-and-access.md))
 - Offline: cached membership/capabilities; server re-validates on sync
-- Tenant packs (Hypeluxe) supply templates and branding, not separate databases unless scale demands it later
+- Tenant packs (Hypeluxe) supply templates, branding, and default **policy data**
+- **Hosting:** machineaid multi-tenant SaaS (Hypeluxe is a customer tenant)
 
 ## Continuous delivery
 

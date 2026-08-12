@@ -8,6 +8,7 @@ Effort is described by **subsystem scope**, not calendar duration.
 - [x] State machines, audit/attribution, identity/RBAC/Party
 - [x] Budget, cost-plus, client invoices, payments, drawdowns
 - [x] Platform engineering: policy as data, functional core/shell, CD, observability
+- [x] Security/compliance decisions: PIPEDA+GDPR, SSO/passwordless, machineaid hosting
 - [ ] Create private repo under `machineaid` (requires org write access; blocked for this agent)
 - [ ] Point Cursor / CI at the new repo; treat these docs as the initial import
 
@@ -62,21 +63,18 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 - Full GL / tax engine / e-invoicing networks (simple PDF invoice export in scope)
 - Payment processing and automatic sync to Stripe/banks/QuickBooks (manual flows first; automation as command adapters later)
-- Document vault (passports, contracts)
-- Email/SMS communications platform
-- Guest self-serve portal (model allows; pilot may stay planner-only)
-- Vendor login, SSO/SAML
+- Document vault (passports, contracts) — pending O-007
+- Email/SMS communications platform — pending O-008
+- Guest self-serve portal — pending O-004
+- Vendor login
+- Homegrown password+MFA (SSO/passwordless is **in**, not deferred)
+
+## Decided (see [decisions.md](./decisions.md))
+
+- D-001 PIPEDA + GDPR
+- D-002 SSO / passwordless out of the gate
+- D-003 machineaid hosts/operates the product
 
 ## Open decisions
 
-1. Repository name under `machineaid` (e.g. `event-ops`)
-2. Sync stack (Electric / PowerSync / CRDT hybrid)
-3. Frontend framework (React vs Solid) given Effect interop preference
-4. Guest-facing itinerary portal in Hypeluxe pilot vs planner-only
-5. Allow logistics before RSVP `attending`?
-6. Require travel-leg link for airport arrival pickups?
-7. Driver role for `StartMovement` vs planner/coordinator only
-8. Payment funds available at `recorded` vs only `cleared`?
-9. Drawdown against cost `committed` vs `actual`?
-10. Host visibility of margins vs invoices/balance-only?
-11. Auto-issue deposit invoices from offering templates?
+See [decisions.md](./decisions.md) O-001 … O-016 (repo name, sync, UI, pilot scope, policy defaults, day-of, multi-currency).

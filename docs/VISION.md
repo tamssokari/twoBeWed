@@ -33,7 +33,9 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 11. **Policy as data** — Tenant/workspace rules are versioned documents evaluated by the core, not hard-coded tenant branches.
 12. **Continuous delivery** — Main always produces a deployable artifact; staging smoke must pass before prod promote.
 13. **Observability** — Traces, metrics, structured logs, correlated with audit via `correlationId`.
-14. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, policy packs, and event-type templates are tenant-scoped.
+14. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, policy packs, and event-type templates are tenant-scoped. **machineaid** owns and hosts the product.
+15. **SSO / passwordless auth** — Prefer IdP SSO and passwordless; do not roll custom MFA ([security-and-compliance.md](./security-and-compliance.md)).
+16. **PIPEDA + GDPR** — Privacy and retention designed for both.
 
 ## Who it’s for
 

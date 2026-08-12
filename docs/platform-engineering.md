@@ -173,7 +173,7 @@ Every command carries `correlationId` (already required for sync idempotency). P
 | SLO | Target (initial) |
 |---|---|
 | Sync apply success (non-conflict) | ≥ 99% over 7d |
-| API command p95 (staging/prod) | define once hosting chosen |
+| API command p95 (staging/prod) | define once baselines exist on machineaid hosting |
 | Smoke suite on staging after deploy | pass before prod promote |
 
 Alert on burn rates once metrics exist — not before instrumentation ships.
