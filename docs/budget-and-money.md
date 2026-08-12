@@ -224,7 +224,14 @@ v1: planners **record** payments and **apply** them to invoices by hand. Only **
 
 ## Drawdowns
 
-A **drawdown** allocates client funds against costs and/or fee — the ops meaning of “we used $X of the client’s money for Y.”
+A **drawdown** allocates **cleared** client funds against costs (and/or fee). For planners this is the **control loop**:
+
+1. Payment milestones are invoiced and **cleared** (receipt acknowledged)  
+2. Vendor costs gain **`actual`** when the supplier invoice is received  
+3. Drawdown posts spend authority against those actuals without exceeding cleared funds  
+4. Budget remaining / burn shows whether the event is staying within plan  
+
+Without drawdowns, deposit collection and vendor spend drift apart.
 
 ```ts
 type Drawdown = {

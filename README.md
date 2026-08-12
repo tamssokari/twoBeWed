@@ -35,6 +35,8 @@ Build a fully functional, **event-agnostic** platform (single-day, multi-day, de
 | [docs/platform-engineering.md](docs/platform-engineering.md) | Policy as data, core/shell, CD, observability |
 | [docs/security-and-compliance.md](docs/security-and-compliance.md) | PIPEDA/GDPR, SSO/passwordless, machineaid hosting |
 | [docs/decisions.md](docs/decisions.md) | Decided vs open calls |
+| [docs/v1-slice.md](docs/v1-slice.md) | What ships in v1 (cut line) |
+| [docs/design-revisions.md](docs/design-revisions.md) | Muratori/Ousterhout-driven approach changes |
 | [docs/customers/hypeluxe.md](docs/customers/hypeluxe.md) | First customer use case |
 | [docs/roadmap.md](docs/roadmap.md) | Incremental milestones |
 

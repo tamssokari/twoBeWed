@@ -58,9 +58,13 @@ packages/tenant-*/   # policy defaults + templates as data, not forked core
 
 ## Policy as data
 
-Hard-coded `if (tenant === "hypeluxe")` is forbidden for product rules. **Policies are versioned documents** evaluated by the core.
+### v1: flat ResolvedPolicy (not a merge engine)
 
-### Policy document
+Hard-coded `if (tenant === "hypeluxe")` remains forbidden. **v1 still avoids a multi-scope policy product.** Hypeluxe ships one flat `ResolvedPolicy` object (see [v1-slice.md](./v1-slice.md)). Evaluation is “load pack defaults”; overrides later.
+
+When a second tenant needs different knobs, introduce versioned `PolicyDocument` merge (platform / workspace / eventType / event) as described below.
+
+### Policy document (post-v1 / multi-tenant)
 
 ```ts
 type PolicyDocument = {

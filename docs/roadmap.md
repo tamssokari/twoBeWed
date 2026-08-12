@@ -7,57 +7,39 @@ Effort is described by **subsystem scope**, not calendar duration.
 - [x] Vision, domain, architecture, Hypeluxe brief
 - [x] State machines, audit/attribution, identity/RBAC/Party
 - [x] Budget, cost-plus, client invoices, payments, drawdowns
-- [x] Platform engineering: policy as data, functional core/shell, CD, observability
-- [x] Security/compliance decisions: PIPEDA+GDPR, SSO/passwordless, machineaid hosting
-- [ ] Create private repo under `machineaid` (requires org write access; blocked for this agent)
+- [x] Platform engineering + security decisions
+- [x] **v1 slice + design revisions** (drawdowns in; offline split; facades)
+- [ ] Create private repo under `machineaid`
 - [ ] Point Cursor / CI at the new repo; treat these docs as the initial import
 
-## Phase 1 — Domain skeleton
+## Phase 1 — Domain skeleton (v1 cut)
 
-- Effect Schema for Workspace, Member, Event, Schedule, Stakeholder, Party, Guest, TravelLeg, Stay, AccommodationBlock, Movement, Budget, Cost, ClientInvoice, PaymentApplication, ClientPayment, Drawdown, CommercialTerms, Vendor, VendorAssignment, Task, AuditRecord, **PolicyDocument**
-- FSM modules + unit tests for illegal vs legal transitions (incl. money machines)
-- Policy evaluator + Hypeluxe default policy fixtures
-- In-memory repos; `Audit` buffer in tests (functional core only)
-- Hypeluxe template JSON (destination wedding + sample multi-day conference)
+- Effect Schema / pure FSMs for v1 entities only ([v1-slice.md](./v1-slice.md))
+- Flat Hypeluxe `ResolvedPolicy` (D-004…D-010)
+- Money math: Billing + **ClientFunds (incl. drawdown)** + DayOfCash
+- `runCommand` tests with in-memory repos + audit buffer
+- Journey unit tests for the three acceptance paths
 
-**Risk:** locking schedule + logistics shapes too early — validate with destination wedding *and* conference examples.
+## Phase 2 — Local client shell (ops)
 
-## Phase 2 — Local client shell
+- App shell + local DB
+- Guests/logistics/day-of cash (local-first)
+- No offline invoice/drawdown apply
 
-- App shell with local DB
-- Auth screens + event list/detail (local-only)
-- Schedule editor for single-day and multi-day
-- Guest list + party + RSVP commands (local-only)
-- Activity feed reading local audit
+## Phase 3 — Online money + sync
 
-**Depends on:** Phase 1 schemas + FSMs stable enough for migrations.
+- Billing + ClientFunds online-authoritative (issue, clear, **drawdown**, budget)
+- Sync ops aggregates; smoke journey 2 (milestones + drawdown) and 1 + 3
 
-## Phase 3 — Sync + cloud
+## Phase 4 — Hypeluxe pack polish
 
-- Choose SQL-sync vs hybrid CRDT
-- Cloud auth + workspace membership/RBAC re-check on sync
-- Offline mutate → online sync smoke (guest + travel leg + audit actor preserved)
-- Reject illegal/authz commands with audited outcomes
+- Templates, branding, dispatcher views, budget vs drawdown widgets
+- Still no payment-processor auto-sync
 
-**Risk:** conflict UX; keep structured logistics fields simple (LWW/row version) before CRDT notes.
+## Phase 5 — CD + light observability
 
-## Phase 4 — Logistics boards + money + Hypeluxe pack
-
-- Accommodation blocks/allotment, stays, movement plans (arrival/departure/local)
-- Arrival-day dispatcher views (offline-capable)
-- Budget sheet, client invoices (draft/issue), costs, **manual** payments + apply to invoice, drawdowns, A/R + cash widgets
-- Tenant branding + destination wedding / gala templates + conference proof template
-- Vendor assignment flows (hotels, transport)
-
-**Note:** Do not start payment-processor or accounting auto-sync in this phase.
-
-## Phase 5 — Continuous delivery + observability hardening
-
-- Staging auto-deploy from main; promote same artifact to prod
-- Playwright smoke gate (offline event, multi-day, logistics, invoice+payment+drawdown, audit)
-- Schema migration discipline (N−1 clients)
-- OTel traces/metrics on command + sync path; `correlationId` end-to-end
-- Policy pack activation tested in CI (schema validate Hypeluxe defaults)
+- Staging smoke = three journeys
+- correlationId + structured logs; OTel deep dive later
 
 ## Explicitly deferred (unless pulled forward)
 

@@ -23,20 +23,21 @@ Rebuild (do not retrofit) on top of the TwoBeWed prototype. The legacy Express +
 
 Domain commands run through **state machines** and append **audit** records (actor stamped on device for offline).
 
-**Also see:** [platform-engineering.md](./platform-engineering.md) — policy as data, functional core / imperative shell, CD, observability.
+**Also see:** [platform-engineering.md](./platform-engineering.md) — policy as data, functional core / imperative shell, CD, observability.  
+**v1 execution cut line:** [v1-slice.md](./v1-slice.md) · [design-revisions.md](./design-revisions.md)
 
 ## Functional core / imperative shell (summary)
 
 | Layer | Responsibility |
 |---|---|
-| **Core** (`packages/domain`) | Schemas, FSMs, policy evaluation, command decisions — no SQL/HTTP/UI imports |
-| **Shells** (`client`, `server`, future integrations) | I/O via Effect Layers implementing ports |
+| **Core** (`packages/domain`) | Schemas, FSM **decision functions**, money math, flat `ResolvedPolicy` — no SQL/HTTP/UI imports |
+| **Shells** (`client`, `server`, future integrations) | I/O via Effect Layers; **`runCommand`** = authz → decide → persist → audit → (optional) span |
 
-UI and (later) Stripe/QuickBooks adapters are shells that **only** call core commands.
+UI and (later) Stripe/QuickBooks adapters are shells that **only** call core commands / money facades (`Billing`, `ClientFunds`, `DayOfCash`).
 
 ## Policy as data (summary)
 
-Product rules (`allowLogisticsBeforeRsvp`, funds availability, host money visibility, etc.) live in **versioned policy documents**, not `if (tenant === …)` branches. Tenant packs ship defaults; workspaces override. Details in [platform-engineering.md](./platform-engineering.md#policy-as-data).
+**v1:** Hypeluxe ships a **flat** `ResolvedPolicy` (D-004…D-010) — not a multi-scope merge engine. Generalize when a second tenant needs different knobs. Details: [v1-slice.md](./v1-slice.md), [platform-engineering.md](./platform-engineering.md#policy-as-data).
 ## EffectTS spine
 
 Use Effect on client and server for:
@@ -55,17 +56,19 @@ UI components call Effect services only — no ad-hoc `fetch` for domain writes.
 
 ## Local-first data plane
 
-**Default recommendation:** SQL-oriented sync (e.g. ElectricSQL or PowerSync) with client SQLite/IndexedDB and Postgres as durable source of truth — good fit for structured events, guests, parties, travel/stay/movement rows, audit append, vendors, and assignments.
+**Ops (local-first):** guests, logistics, day-of cash — read/write local DB; sync as Effect fibers.
 
-**Hybrid for collaboration:** notes/checklists may use CRDT (Automerge/Loro) or explicit LWW + history if multi-device concurrent editing is required.
+**Money (online-authoritative in v1):** Billing + ClientFunds (invoices, clear payment, **drawdowns**, budget edits) apply on the server when online. Do not pretend offline-safe distributed money in v1. Optional stale read-only caches must be labeled.
+
+**Default sync recommendation for ops:** SQL-oriented sync (e.g. ElectricSQL or PowerSync) with client SQLite/IndexedDB and Postgres as durable source of truth.
+
+**Hybrid for collaboration (backlog):** notes/checklists CRDT — deferred per [v1-slice.md](./v1-slice.md).
 
 Rules:
 
-- All primary reads/writes go to the **local** store first
-- Sync runs as background Effect fibers with visible pending/conflict/synced state
-- Conflict policy decided per aggregate (structured fields vs notes)
-
-Decision still open: pure SQL-sync vs CRDT vs hybrid — lock before implementation spike.
+- Ops primary reads/writes hit the **local** store first  
+- Money commands use online apply (block or explicit pending — prefer block in v1)  
+- Sync conflicts on ops surface for resolution and are audited  
 
 ## Auth & tenancy
 

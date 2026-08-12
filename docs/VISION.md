@@ -23,7 +23,7 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 1. **Event-agnostic core** — Domain nouns are workspace, event, schedule, guest, party, logistics (incl. movements), vendor, task, note, stakeholder. Verticals add templates and language, not parallel schemas.
 2. **Schedule is first-class** — Single-day and multi-day are equal citizens (see domain model).
 3. **Guests + logistics are first-class** — Attendance is not enough; arrival, lodging, pickups/dropoffs, and local travel are core ops data (see domain model).
-4. **Budgets, invoicing & cost-plus are first-class** — Events carry budgets, costs, client invoices, payments, and drawdowns (see budget & money doc). Not a full accounting suite.
+4. **Budgets, invoicing, drawdowns & cost-plus are first-class** — Planners control spend via budget + cleared payment milestones + drawdowns against actuals (see budget & money / v1 slice). Not a full accounting suite.
 5. **Manual ops before automation** — Establish complete human-driven flows (record payment, apply to invoice, post drawdown, issue invoice) before payment gateways or accounting auto-sync. Automation must map onto those same commands — it does not invent a parallel path.
 6. **Explicit state machines** — Status changes go through commands with legal transitions (see state machines).
 7. **Audit & attribution** — Meaningful actions record who/when/what, including offline actors (see audit doc).
