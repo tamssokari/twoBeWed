@@ -24,12 +24,13 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 2. **Schedule is first-class** — Single-day and multi-day are equal citizens (see domain model).
 3. **Guests + logistics are first-class** — Attendance is not enough; arrival, lodging, pickups/dropoffs, and local travel are core ops data (see domain model).
 4. **Budgets, invoicing & cost-plus are first-class** — Events carry budgets, costs, client invoices, payments, and drawdowns (see budget & money doc). Not a full accounting suite.
-5. **Explicit state machines** — Status changes go through commands with legal transitions (see state machines).
-6. **Audit & attribution** — Meaningful actions record who/when/what, including offline actors (see audit doc).
-7. **Local-first UX** — Reads and writes hit a local store first; sync is background. Venue Wi‑Fi and travel days are unreliable; the product must still work.
-8. **EffectTS everywhere it matters** — Typed errors, composable services, and swappable Layers for local DB, sync, and auth.
-9. **Continuous delivery** — Main always produces a deployable artifact; staging smoke tests include offline → online sync.
-10. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, and event-type packs are tenant-scoped.
+5. **Manual ops before automation** — Establish complete human-driven flows (record payment, apply to invoice, post drawdown, issue invoice) before payment gateways or accounting auto-sync. Automation must map onto those same commands — it does not invent a parallel path.
+6. **Explicit state machines** — Status changes go through commands with legal transitions (see state machines).
+7. **Audit & attribution** — Meaningful actions record who/when/what, including offline actors (see audit doc).
+8. **Local-first UX** — Reads and writes hit a local store first; sync is background. Venue Wi‑Fi and travel days are unreliable; the product must still work.
+9. **EffectTS everywhere it matters** — Typed errors, composable services, and swappable Layers for local DB, sync, and auth.
+10. **Continuous delivery** — Main always produces a deployable artifact; staging smoke tests include offline → online sync.
+11. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, and event-type packs are tenant-scoped.
 
 ## Who it’s for
 
@@ -47,6 +48,7 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 - Full accounting/ERP (GL, tax engine) — we **do** track event budgets, cost-plus terms, **client invoices**, payments, and drawdowns
 - Payment gateway as a hard dependency (manual payment recording + apply to invoice first; gateway optional later)
 - E-invoicing legal networks / tax authority integrations (store tax totals; don’t file)
+- Auto-sync to accounting/payment systems before the manual command flows are proven
 - Document vault (passports, contracts) and built-in email/SMS blasts
 - Replacing dedicated CRM systems
 - Real-time video or chat as a primary feature

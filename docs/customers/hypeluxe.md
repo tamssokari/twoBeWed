@@ -48,6 +48,7 @@ Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …
 - Full accounting/ERP (GL/tax filing networks) — event invoicing + money tracking **is** in scope
 - Payment gateway required (manual payment recording + apply to invoice first)
 - Fancy branded invoice designer (structured invoice + simple PDF/print yes)
+- Automatic payment/accounting sync before manual billing flows are in daily use
 - Document vault and email/SMS blast platform
 - Full seating-chart product (guest list + parties first)
 - Vendor self-serve portal (unless explicitly pulled forward)

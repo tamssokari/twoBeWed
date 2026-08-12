@@ -93,7 +93,7 @@ When enabled: Guest record links `userId`; that user gets `guest` role **scoped 
 | Area | Stance |
 |---|---|
 | **Full accounting/ERP** | Event budget/cost-plus/**client invoicing**/payments/drawdowns are in scope; GL/tax filing/payroll are not |
-| **Payment gateway** | Optional later; record + apply payments to invoices first |
+| **Payment gateway / auto accounting sync** | Future only — after manual issue/record/apply/drawdown flows are proven; integrations must call the same domain commands |
 | **Documents** | No passport/contract vault in v1 (note as Hypeluxe follow-on) |
 | **Communications** | No built-in email/SMS blast in v1; RSVP may be planner-entered; intake channel TBD |
 | **Vendor login** | Not in pilot |

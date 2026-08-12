@@ -20,9 +20,22 @@ This is **in scope** for the platform domain. It is **not** a full accounting/ER
 - Tax filing engines / e-invoicing legal networks (store tax flags & totals; don’t become a tax authority)
 - Multi-currency hedging, payroll
 - Replacing the agency’s accountant or Xero/QuickBooks (export/sync later is fine)
-- Automated card charging / payment gateway as a must-have for v1 (record payment + apply to invoice first; gateway optional later)
+- Payment processing / gateways and **automatic** sync with banks, Stripe, QuickBooks, etc. as a day-one requirement
 - Fancy PDF brand studio (structured invoice + simple printable/PDF export is enough for pilot)
 
+## Manual first, automation later
+
+All billing/cash flows must be completable **by a planner with no external system connected**:
+
+| Manual command (required first) | Future automation (optional) |
+|---|---|
+| `DraftClientInvoice` / `IssueClientInvoice` | Generate from gateway schedule; e-mail send |
+| `RecordClientPayment` + `ApplyPaymentToInvoice` | Stripe/bank webhook → same commands |
+| `ClearClientPayment` | Bank reconciliation import |
+| `PostDrawdown` | (usually stays manual; rare auto rules) |
+| `InvoiceCost` / `MarkCostPaid` (vendor side) | AP sync from accounting |
+
+**Rule:** integrations may only **invoke the same domain commands** (with `actor = system:<integration>` and full audit). They must not write invoice/payment/drawdown rows through a side door. Ship and harden the manual path before enabling sync.
 ## Two directions of “invoice”
 
 | Direction | Meaning | Model |
@@ -206,7 +219,7 @@ type ClientPayment = {
 }
 ```
 
-v1: planners **record** payments and **apply** them to invoices. Payment-gateway capture is optional later — same stance as GDS/PMS: track references, don’t require owning the rails.
+v1: planners **record** payments and **apply** them to invoices by hand. Payment processing and automatic sync with processors/accounting are a **future** case — and when added, they call these same commands (see [Manual first, automation later](#manual-first-automation-later)).
 
 ## Drawdowns
 
@@ -282,20 +295,20 @@ Day-of coordinators often should **not** see full cost-plus margins — tenant p
 ## Export & delivery
 
 - Structured invoice in DB is source of truth
-- PDF/print export for email attachment (delivery channel may be external in v1)
-- Optional later: accounting export (CSV / QuickBooks), payment links on issued invoices
+- PDF/print export for email attachment (delivery channel may be external in v1 — planner emails the PDF)
+- **Later:** payment links, accounting export, webhook sync — only after manual issue/record/apply flows are stable
 
 ## Hypeluxe
 
-Destination weddings: deposit invoice → progress as vendors commit → final cost-plus reconciliation; large vendor costs; staged client payments applied to invoices; arrival-week drawdowns against hotels/transport. Conferences reuse the same invoice/payment/drawdown machinery with different categories.
+Destination weddings: deposit invoice → progress as vendors commit → final cost-plus reconciliation; large vendor costs; staged client payments applied to invoices; arrival-week drawdowns against hotels/transport. Conferences reuse the same invoice/payment/drawdown machinery with different categories. Hypeluxe pilot runs **manual** billing/cash; processor sync is not required to close an event.
 
 ## Implementation phasing
 
 | Slice | Scope |
 |---|---|
 | M-money-1 | Schema: Budget, Cost, ClientInvoice, PaymentApplication, ClientPayment, Drawdown + FSMs + audit |
-| M-money-2 | UI: budget sheet, draft/issue invoice, record+apply payment, post drawdown, A/R + cash widgets |
+| M-money-2 | UI: **manual** budget sheet, draft/issue invoice, record+apply payment, post drawdown, A/R + cash widgets |
 | M-money-3 | Generate final/reconciliation invoice from cost-plus snapshot; simple PDF export |
-| Later | Payment gateway, accounting export, multi-currency conversion, e-invoicing networks |
+| M-money-4 (future) | Payment gateway + optional accounting/bank sync **as command adapters** (same FSMs, system actor, audit) |
 
-Local-first: money rows sync like other structured data; void/reverse/issue must be idempotent under `correlationId`.
+Local-first: money rows sync like other structured data between devices; that is **not** the same as auto-sync to Stripe/QuickBooks. Void/reverse/issue must be idempotent under `correlationId`.

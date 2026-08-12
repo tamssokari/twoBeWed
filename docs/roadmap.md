@@ -42,9 +42,11 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 - Accommodation blocks/allotment, stays, movement plans (arrival/departure/local)
 - Arrival-day dispatcher views (offline-capable)
-- Budget sheet, client invoices (draft/issue), costs, payments + apply to invoice, drawdowns, A/R + cash widgets
+- Budget sheet, client invoices (draft/issue), costs, **manual** payments + apply to invoice, drawdowns, A/R + cash widgets
 - Tenant branding + destination wedding / gala templates + conference proof template
 - Vendor assignment flows (hotels, transport)
+
+**Note:** Do not start payment-processor or accounting auto-sync in this phase.
 
 ## Phase 5 — Continuous delivery hardening
 
@@ -55,7 +57,7 @@ Effort is described by **subsystem scope**, not calendar duration.
 ## Explicitly deferred (unless pulled forward)
 
 - Full GL / tax engine / e-invoicing networks (simple PDF invoice export in scope)
-- Payment gateway (manual payment recording + apply first)
+- Payment processing and automatic sync to Stripe/banks/QuickBooks (manual flows first; automation as command adapters later)
 - Document vault (passports, contracts)
 - Email/SMS communications platform
 - Guest self-serve portal (model allows; pilot may stay planner-only)

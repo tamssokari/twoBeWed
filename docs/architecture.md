@@ -83,3 +83,4 @@ packages/
 - Treating REST CRUD as the primary client data path
 - Wedding-specific tables in the core schema
 - Payments ledger as full GL, document vault, or messaging platform
+- Payment-processor or accounting **auto-sync** before manual domain commands are the supported path (future adapters must call the same Effect commands with a system actor)
