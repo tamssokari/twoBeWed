@@ -212,6 +212,17 @@ Do **not** edit line totals on `issued`+; use void + replacement or `adjustment`
 
 Not a long-lived status enum — `PublishCommercialTerms` / `ReviseCommercialTerms` commands write a new versioned terms record + audit (+ optional snapshot). See [budget-and-money.md](./budget-and-money.md).
 
+## DayOfCashFloatLifecycle
+
+| From | Command | To | Guard |
+|---|---|---|---|
+| _(new)_ | `IssueDayOfCashFloat` | `open` | `planner` (or owner); amount &gt; 0; date/schedule day set |
+| `open` | `RecordDayOfCashPayout` | `open` | actor `coordinator` or `planner`; amount ≤ remaining float |
+| `open` | `ReconcileDayOfCashFloat` | `reconciled` | closing count provided; variance computed |
+| `open` \| `reconciled` | `VoidDayOfCashFloat` | `void` | `planner`; no orphaned payouts or payouts voided |
+
+Remaining float ≈ openingAmount − sum(payouts). Coordinators may use these commands under D-010 without `coordinatorCanReadMoney`.
+
 ---
 
 ## SyncDelivery (infrastructure, not domain ops)

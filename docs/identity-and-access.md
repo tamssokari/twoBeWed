@@ -53,7 +53,7 @@ Roles are **workspace-scoped**; event-level overrides can come later.
 |---|---|
 | `owner` | Full workspace admin, billing (when exists), delete |
 | `planner` | Full event ops: guests, logistics commands, vendors, publish event |
-| `coordinator` | Day-of ops: movements, stays check-in, guest field edits; no workspace admin |
+| `coordinator` | Day-of ops: movements, stays check-in, guest field edits; **day-of cash float** (D-010); no budget/invoice/margin access (D-009) |
 | `viewer` | Read events/guests/logistics; no state-changing commands |
 | `host` | Stakeholder portal: read own event; limited guest visibility per policy |
 | `guest` | (Later) own itinerary read/submit travel; no other guests |
@@ -74,7 +74,9 @@ State-machine commands declare required roles (Effect `Authz.require("planner")`
 | `RecordClientPayment` / `ApplyPaymentToInvoice` / `PostDrawdown` | `planner` |
 | `DraftClientInvoice` / `IssueClientInvoice` / `VoidClientInvoice` | `planner` |
 | `LockBudget` / `ReviseCommercialTerms` | `planner` |
-| View cost-plus margins | `planner` / `owner` only (D-009: coordinators cannot) |
+| `RecordDayOfCashPayout` / `ReconcileDayOfCashFloat` | `coordinator` (D-010) |
+| `IssueDayOfCashFloat` | `planner` |
+| View cost-plus margins / invoices / drawdowns | `planner` / `owner` only (D-009) |
 
 Denied attempts may be security-logged; they do not create domain audit success rows.
 

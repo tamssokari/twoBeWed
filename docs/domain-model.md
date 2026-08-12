@@ -27,6 +27,7 @@ Workspace
         ├── ClientPayment[]
         ├── PaymentApplication[]     // payment → invoice
         ├── Drawdown[]
+        ├── DayOfCashFloat[] + DayOfCashPayout[]   // coordinator day-of cash (D-010)
         ├── CommercialTerms (versioned)
         ├── VendorAssignment[]
         ├── Offering / Package (optional)
@@ -195,6 +196,7 @@ First-class for cost-plus and retainer-style events:
 - **ClientPayment** + **PaymentApplication** — funds in, applied to invoices  
 - **Drawdown** — allocate cleared funds against costs and/or fee  
 - **CommercialTerms** — cost-plus %, flat fee, hybrid  
+- **DayOfCashFloat / DayOfCashPayout** — on-site float, COD/tips, EOD reconcile (coordinator-accessible; D-010)  
 
 Not a full accounting suite (no GL). Simple PDF/export for invoices; payment gateways optional later.
 
@@ -214,7 +216,7 @@ Passport scans, contracts, email/SMS invite blasts — **out of v1** unless Hype
 | `user` | User + WorkspaceMember |
 | `client` (+ `weddingDate`) | `Event` + `Schedule` + stakeholders |
 | `vendor` | `Vendor` + assignments |
-| _(none)_ | Party, Guest, TravelLeg, Stay, Movement, Budget, Cost, ClientInvoice, ClientPayment, Drawdown, AuditRecord |
+| _(none)_ | Party, Guest, TravelLeg, Stay, Movement, Budget, Cost, ClientInvoice, ClientPayment, Drawdown, DayOfCashFloat, AuditRecord |
 | `@twobewed.com` email rule | Tenant auth policy (not global) |
 
 ## Invariants

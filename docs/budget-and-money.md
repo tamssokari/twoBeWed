@@ -284,10 +284,53 @@ Changing markup % mid-event is dangerous. Rules:
 | Record client payment / apply to invoice | `planner` |
 | Post drawdown | `planner` |
 | Void drawdown / reverse payment | `owner` or `planner` |
-| View money / invoices | `planner`, `owner` only for Hypeluxe (D-009: `coordinatorCanReadMoney = false`); `host` visibility TBD (O-005) |
-| `viewer` / `coordinator` | No money reads or writes (D-009) |
+| View money / invoices | `planner`, `owner` only for full ledger (D-009). Coordinators: **day-of cash only** (D-010) |
+| `viewer` | No money |
+| Manage day-of cash float | `coordinator`, `planner` (D-010) |
 
-Day-of coordinators do **not** see cost-plus margins or money amounts (D-009).
+Day-of coordinators do **not** see cost-plus margins, budgets, or client A/R (D-009). They **do** manage day-of cash float (D-010).
+
+## Day-of cash (coordinator-accessible)
+
+Separate from client billing / drawdowns. Hypeluxe (D-010): coordinators may run **day-of cash management** without seeing the full money board.
+
+**In scope**
+
+1. **Float issued** — petty cash / float given to the on-site coordinator for a schedule day  
+2. **Payouts from float** — on-site vendor COD, tips, small cash spends against that float  
+4. **End-of-day reconciliation** — opening float → payouts → closing count / variance  
+
+**Out of scope (for this slice)**
+
+- Guest cash intake / extras (not selected)  
+- Client invoice payments, drawdowns, budget, cost-plus margins  
+
+```ts
+type DayOfCashFloat = {
+  id: string
+  eventId: string
+  scheduleUnitId?: string    // which day
+  date: string               // calendar day in event timezone
+  issuedToUserId: string     // coordinator
+  openingAmount: Money
+  status: "open" | "reconciled" | "void"
+  closingCounted?: Money
+  variance?: Money           // closingCounted − (opening − sum(payouts))
+}
+
+type DayOfCashPayout = {
+  id: string
+  floatId: string
+  amount: Money
+  kind: "vendor_cod" | "tip" | "other"
+  payeeLabel?: string
+  vendorId?: string
+  notes?: string
+  recordedAt: DateTime
+}
+```
+
+Planners may issue the float; coordinators record payouts and reconcile. All commands audited. Does **not** change client payment / drawdown pools.
 
 ## Relationship to “offering / package”
 

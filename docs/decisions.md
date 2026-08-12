@@ -35,6 +35,6 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 ## Doc follow-ups queued after opens resolve
 
 - Acceptance journeys + smoke list
-- Hypeluxe fixture pack outline (incl. policy pack reflecting D-004…D-009)
+- Hypeluxe fixture pack outline (incl. policy pack reflecting D-004…D-010)
 - Host money visibility (O-005) once chosen
 - Security retention defaults once Hypeluxe agrees

@@ -27,7 +27,7 @@ Core storage remains `Event` + `Schedule` + `Guest` + logistics + money + …; H
 4. **Travel & stays** — track inbound/outbound legs and stays against an accommodation block (confirmations, not GDS booking).
 5. **Transfers & local travel** — unified **movements** (`arrival` / `departure` / `local`); arrival pickups linked to flights; hotel↔venue shuttles.
 6. **Multi-day conference (platform proof)** — multi-day schedule units (sessions), delegate guest list, conference hotels, airport transfers, hotel↔venue shuttles — same schemas as destination wedding logistics.
-7. **Budget, invoicing & cost-plus** — event budget, vendor costs, client invoices (deposit/progress/final), payments applied to invoices, drawdowns against costs/fee; A/R and cash balance.
+7. **Budget, invoicing & cost-plus** — event budget, vendor costs, client invoices (deposit/progress/final), payments applied to invoices, drawdowns against costs/fee; A/R and cash balance. Coordinators excluded from this board (D-009) except **day-of cash float** (D-010: issue float, COD/tip payouts, EOD reconcile).
 8. **Planner portfolio** — list/filter events by status and date; day-of logistics boards offline-capable; activity trail for attribution.
 9. **Vendor roster** — hotels, transport partners, venues reused across events.
 
