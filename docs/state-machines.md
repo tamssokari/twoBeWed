@@ -245,7 +245,7 @@ const assignMovement = (id: MovementId, vehicleId: VehicleId) =>
 
 ## Open product knobs
 
-- Allow logistics commands while GuestRsvp = `invited`?
+- ~~Allow logistics commands while GuestRsvp = `invited`?~~ → **No** (D-004)
 - Require travel-leg link for airport arrival pickups?
 - Driver role for `StartMovement`, or planner-only in Hypeluxe pilot?
 - Client payment: do `recorded` funds count before `cleared`?

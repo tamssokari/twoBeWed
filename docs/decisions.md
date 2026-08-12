@@ -9,6 +9,7 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | D-001 | **Compliance: PIPEDA + GDPR** | 2026-08-12 | Design to the stricter overlapping control; see [security-and-compliance.md](./security-and-compliance.md) |
 | D-002 | **Authn: SSO / passwordless out of the gate** | 2026-08-12 | Avoid rolling our own MFA; use IdP / passwordless provider factors |
 | D-003 | **Hosting: machineaid product** | 2026-08-12 | machineaid operates staging/prod; Hypeluxe is a tenant/customer |
+| D-004 | **Policy: `allowLogisticsBeforeRsvp` = false** | 2026-08-12 | Hypeluxe default: logistics only when GuestRsvp is `attending` |
 
 ## Open (need input)
 
@@ -22,7 +23,6 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | O-006 | Seating / floor plans | out / thin wedge |
 | O-007 | Documents | out / upload+tag only |
 | O-008 | Notifications | out / in-app only |
-| O-009 | `allowLogisticsBeforeRsvp` | yes / no |
 | O-010 | `requireFlightLinkForAirportPickup` | yes / no |
 | O-011 | Drawdown funds | `recorded` / `cleared` |
 | O-012 | Drawdown cost basis | `committed` / `actual` |
