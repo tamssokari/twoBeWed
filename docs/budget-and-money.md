@@ -157,7 +157,7 @@ type InvoiceLine = {
 | Path | Command / flow |
 |---|---|
 | Manual | `DraftClientInvoice` — planner builds lines |
-| Deposit schedule | From commercial/offering template (“40% deposit”) |
+| Deposit schedule | From commercial/offering template (“40% deposit”) — Hypeluxe: **auto-draft** on offering attach (D-008); planner still runs `IssueClientInvoice` |
 | Progress | Planner selects costs + fee portion → lines |
 | Final / reconciliation | `GenerateFinalInvoice` from cost-plus obligation snapshot − prior issued totals |
 
@@ -248,8 +248,8 @@ type DrawdownAllocation = {
 **Invariants (v1):**
 
 1. Sum(allocations.amount) = drawdown.amount  
-2. Posted drawdowns against costs cannot exceed that cost’s `actual`/`committed` (policy pick) without an override role  
-3. Sum(posted drawdowns) cannot exceed sum(cleared client payments) without override (`owner`/`planner`)  
+2. Posted drawdowns against costs cannot exceed that cost’s **`actual`** (vendor invoice/receipt received — D-007) without an override role; no `actual` ⇒ not drawdown-eligible  
+3. Sum(posted drawdowns) cannot exceed sum(cleared client payments) without override (`owner`/`planner`) (D-006)  
 4. Sum(payment applications) for a payment ≤ payment.amount  
 5. Sum(applications) to an invoice ≤ invoice.total (unless write-off / adjustment policy)  
 6. Reversal: `void` invoice/drawdown; `reversed` payment; never delete audit history  
@@ -264,7 +264,7 @@ balance_due_ar ≈ sum(invoice.amountDue)
 cash_balance ≈ cleared_payments − posted_drawdowns
 ```
 
-Basis timing (`committed` vs `actual`) is a tenant setting defaulting to `actual` when present else `committed`.
+Basis for cost-plus obligation reporting may still use `committed` for forecasts; **drawdown caps use `actual` only** (D-007).
 
 ## Snapshots & audit
 

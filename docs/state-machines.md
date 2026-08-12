@@ -249,6 +249,6 @@ const assignMovement = (id: MovementId, vehicleId: VehicleId) =>
 - ~~Require travel-leg link for airport arrival pickups?~~ → **Yes** (D-005)
 - Driver role for `StartMovement`, or planner-only in Hypeluxe pilot?
 - ~~Client payment: do `recorded` funds count before `cleared`?~~ → **No — cleared only** (D-006); recorded = client claim, cleared = receipt acknowledged
-- Drawdown basis against cost `committed` vs `actual`?
+- ~~Drawdown basis against cost `committed` vs `actual`?~~ → **`actual` only** (D-007) — actual = vendor invoice/receipt received; no draw until receipted
 - Can `host` see full cost-plus margins or only their invoices / balance due?
-- Auto-issue deposit invoices from offering templates vs manual draft only?
+- ~~Auto-issue deposit invoices from offering templates vs manual draft only?~~ → **Auto-draft yes, issue still manual** (D-008)

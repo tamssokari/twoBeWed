@@ -83,7 +83,7 @@ type PolicyDocument = {
 | Logistics | `allowLogisticsBeforeRsvp`, `requireFlightLinkForAirportPickup` |
 | Money | `paymentFundsAvailableAt: "cleared"` (D-006), `drawdownBasis: "actual"` (D-007), `costPlusDefaults`, markup-eligible categories |
 | Visibility | `coordinatorCanReadMoney`, `hostSeesMargins`, `hostSeesOwnInvoicesOnly` |
-| Invoicing | `autoDraftDepositFromOffering`, `requireCommercialSnapshotOnIssue` |
+| Invoicing | `autoDraftDepositFromOffering: true` (D-008), `requireCommercialSnapshotOnIssue` |
 | Capacity | waitlist enabled, room-block overbook rule |
 | Retention | audit retention window |
 
