@@ -74,7 +74,7 @@ State-machine commands declare required roles (Effect `Authz.require("planner")`
 | `RecordClientPayment` / `ApplyPaymentToInvoice` / `PostDrawdown` | `planner` |
 | `DraftClientInvoice` / `IssueClientInvoice` / `VoidClientInvoice` | `planner` |
 | `LockBudget` / `ReviseCommercialTerms` | `planner` |
-| View cost-plus margins | `planner` / `owner` (host: own invoices + balance optional) |
+| View cost-plus margins | `planner` / `owner` only (D-009: coordinators cannot) |
 
 Denied attempts may be security-logged; they do not create domain audit success rows.
 

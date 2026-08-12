@@ -284,8 +284,8 @@ Changing markup % mid-event is dangerous. Rules:
 | Record client payment / apply to invoice | `planner` |
 | Post drawdown | `planner` |
 | Void drawdown / reverse payment | `owner` or `planner` |
-| View money / invoices | `planner`, `owner`; `host` may see **their** invoices + balance (tenant policy) |
-| `viewer` / `coordinator` | No money writes; coordinator **read** optional (default deny for amounts) |
+| View money / invoices | `planner`, `owner` only for Hypeluxe (D-009: `coordinatorCanReadMoney = false`); `host` visibility TBD (O-005) |
+| `viewer` / `coordinator` | No money reads or writes (D-009) |
 
 Day-of coordinators often should **not** see full cost-plus margins — tenant policy.
 

@@ -14,6 +14,7 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | D-006 | **Policy: drawdown funds = `cleared` only** | 2026-08-12 | `recorded` = client claim; `cleared` = planner/host acknowledged receipt. Only cleared counts toward available funds |
 | D-007 | **Policy: drawdown cost basis = `actual`** | 2026-08-12 | Cap drawdowns on cost `actual` (amount from vendor invoice/receipt **received**). If `actual` unset, no draw against that cost until receipted (or override). Prefer not to use bare `committed` as spendable basis |
 | D-008 | **Policy: `autoDraftDepositFromOffering` = true** | 2026-08-12 | Attaching an offering with a deposit schedule auto-creates a **draft** ClientInvoice; planner still issues manually |
+| D-009 | **Policy: `coordinatorCanReadMoney` = false** | 2026-08-12 | Coordinators do not see budgets/invoices/payments/margins; planner/owner only |
 
 ## Open (need input)
 
@@ -27,7 +28,6 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | O-006 | Seating / floor plans | out / thin wedge |
 | O-007 | Documents | out / upload+tag only |
 | O-008 | Notifications | out / in-app only |
-| O-014 | Coordinator sees money | yes / no |
 | O-015 | `StartMovement` actor | planner/coordinator / add driver role |
 | O-016 | Multi-currency | single currency per event (pilot) / FX phase-2 |
 
