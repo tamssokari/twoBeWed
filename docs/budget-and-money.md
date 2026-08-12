@@ -287,7 +287,7 @@ Changing markup % mid-event is dangerous. Rules:
 | View money / invoices | `planner`, `owner` only for Hypeluxe (D-009: `coordinatorCanReadMoney = false`); `host` visibility TBD (O-005) |
 | `viewer` / `coordinator` | No money reads or writes (D-009) |
 
-Day-of coordinators often should **not** see full cost-plus margins — tenant policy.
+Day-of coordinators do **not** see cost-plus margins or money amounts (D-009).
 
 ## Relationship to “offering / package”
 
