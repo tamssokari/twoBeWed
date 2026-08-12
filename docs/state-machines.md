@@ -148,6 +148,54 @@ Inbound/outbound long-haul (or intercity) legs.
 
 ---
 
+## BudgetLifecycle
+
+| From | Command | To | Guard |
+|---|---|---|---|
+| _(new)_ | `CreateBudget` | `draft` | event exists |
+| `draft` | `ActivateBudget` | `active` | ≥1 line |
+| `active` | `LockBudget` | `locked` | — |
+| `locked` | `UnlockBudget` | `active` | `planner` / `owner` |
+| `draft` \| `active` \| `locked` | `ArchiveBudget` | `archived` | — |
+
+Line edits allowed in `draft` / `active`; `locked` rejects line mutations (override command `ForceEditLockedBudget` optional later).
+
+## CostLifecycle
+
+| From | Command | To | Guard |
+|---|---|---|---|
+| _(new)_ | `EstimateCost` | `estimated` | — |
+| `estimated` | `CommitCost` | `committed` | amount set |
+| `committed` | `InvoiceCost` | `invoiced` | — |
+| `invoiced` | `MarkCostPaid` | `paid` | — |
+| `estimated` \| `committed` \| `invoiced` | `CancelCost` | `cancelled` | — |
+
+Amounts may be updated via `ReviseCostAmounts` without changing status when still `estimated` / `committed` (audited).
+
+## ClientPaymentLifecycle
+
+| From | Command | To | Guard |
+|---|---|---|---|
+| _(new)_ | `RecordClientPayment` | `recorded` | amount &gt; 0 |
+| `recorded` | `ClearClientPayment` | `cleared` | — |
+| `recorded` \| `cleared` | `ReverseClientPayment` | `reversed` | no posted drawdowns depend on it **or** override |
+
+`cleared` counts toward available funds for drawdowns (tenant may treat `recorded` as available — default: only `cleared`).
+
+## DrawdownLifecycle
+
+| From | Command | To | Guard |
+|---|---|---|---|
+| _(new)_ | `DraftDrawdown` | `pending` | allocations sum = amount |
+| `pending` | `PostDrawdown` | `posted` | funds available (payments − posted drawdowns) ≥ amount; cost caps |
+| `pending` \| `posted` | `VoidDrawdown` | `void` | `posted` void restores availability |
+
+## CommercialTerms
+
+Not a long-lived status enum — `PublishCommercialTerms` / `ReviseCommercialTerms` commands write a new versioned terms record + audit (+ optional snapshot). See [budget-and-money.md](./budget-and-money.md).
+
+---
+
 ## SyncDelivery (infrastructure, not domain ops)
 
 Per local command / mutation batch:
@@ -182,3 +230,6 @@ const assignMovement = (id: MovementId, vehicleId: VehicleId) =>
 - Allow logistics commands while GuestRsvp = `invited`?
 - Require travel-leg link for airport arrival pickups?
 - Driver role for `StartMovement`, or planner-only in Hypeluxe pilot?
+- Client payment: do `recorded` funds count before `cleared`?
+- Drawdown basis against cost `committed` vs `actual`?
+- Can `host` see full cost-plus margins or only balance due?

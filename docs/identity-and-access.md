@@ -71,6 +71,9 @@ State-machine commands declare required roles (Effect `Authz.require("planner")`
 | `AssignMovement` | `coordinator` |
 | `StartMovement` | `coordinator` (driver role TBD) |
 | `InviteGuest` | `planner` |
+| `RecordClientPayment` / `PostDrawdown` | `planner` |
+| `LockBudget` / `ReviseCommercialTerms` | `planner` |
+| View cost-plus margins | `planner` / `owner` (host summary optional) |
 
 Denied attempts may be security-logged; they do not create domain audit success rows.
 
@@ -88,10 +91,11 @@ When enabled: Guest record links `userId`; that user gets `guest` role **scoped 
 
 | Area | Stance |
 |---|---|
-| **Money** | Packages/offering metadata only; no deposits, invoices, comps ledger in v1 |
+| **Full accounting/ERP** | Event budget/cost-plus/payments/drawdowns are in scope; GL/tax/payroll are not |
+| **Payment gateway** | Optional later; record payments manually first |
 | **Documents** | No passport/contract vault in v1 (note as Hypeluxe follow-on) |
 | **Communications** | No built-in email/SMS blast in v1; RSVP may be planner-entered; intake channel TBD |
 | **Vendor login** | Not in pilot |
 | **SSO / SAML** | Not required for pilot |
 
-Deferred does not mean “never”; it means out of Phase 1–4 unless Hypeluxe pulls it forward.
+Deferred does not mean “never”; it means out of early phases unless Hypeluxe pulls it forward.

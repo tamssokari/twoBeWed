@@ -29,8 +29,8 @@ Use Effect on client and server for:
 | Concern | Approach |
 |---|---|
 | Domain use cases | Effect programs with typed errors (`Unauthorized`, `IllegalTransition`, `Conflict`, `Validation`, `SyncConflict`) |
-| Dependencies | Service interfaces (`EventRepo`, `GuestRepo`, `LogisticsRepo`, `VendorRepo`, `Audit`, `Auth`, `Authz`, `Clock`) provided via Layers |
-| Schema | Shared Effect Schema for Event, Schedule, Guest, Party, TravelLeg, Stay, Movement, Vendor, AuditRecord, etc. |
+| Dependencies | Service interfaces (`EventRepo`, `GuestRepo`, `LogisticsRepo`, `BudgetRepo`, `PaymentRepo`, `VendorRepo`, `Audit`, `Auth`, `Authz`, `Clock`) provided via Layers |
+| Schema | Shared Effect Schema for Event, Schedule, Guest, Party, TravelLeg, Stay, Movement, Budget, Cost, ClientPayment, Drawdown, Vendor, AuditRecord, etc. |
 | State changes | Command handlers enforce FSMs ([state-machines.md](./state-machines.md)); no raw status writes |
 | Audit | `Audit.append` on successful commands + sync rejections ([audit-and-attribution.md](./audit-and-attribution.md)) |
 | Config | Effect Config for env (no scattered `process.env` reads) |
@@ -82,4 +82,4 @@ packages/
 - Sharing business logic by wrapping the existing Mongoose controllers
 - Treating REST CRUD as the primary client data path
 - Wedding-specific tables in the core schema
-- Payments ledger, document vault, or messaging platform
+- Payments ledger as full GL, document vault, or messaging platform

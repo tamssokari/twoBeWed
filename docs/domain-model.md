@@ -2,7 +2,7 @@
 
 This document defines the target domain for the new platform. It deliberately generalizes the legacy TwoBeWed models (`user`, `client`, `vendor`).
 
-**Related:** [state-machines.md](./state-machines.md) (legal status transitions), [identity-and-access.md](./identity-and-access.md) (users, parties, RBAC), [audit-and-attribution.md](./audit-and-attribution.md).
+**Related:** [state-machines.md](./state-machines.md) (legal status transitions), [identity-and-access.md](./identity-and-access.md) (users, parties, RBAC), [audit-and-attribution.md](./audit-and-attribution.md), [budget-and-money.md](./budget-and-money.md) (cost-plus, payments, drawdowns).
 
 ## Core entities
 
@@ -20,6 +20,11 @@ Workspace
         ├── AccommodationBlock[]
         ├── Movement[]               // arrival | departure | local
         ├── TransferPlan[]           // optional grouping of movements
+        ├── Budget + BudgetLine[]
+        ├── Cost[]
+        ├── ClientPayment[]
+        ├── Drawdown[]
+        ├── CommercialTerms (versioned)
         ├── VendorAssignment[]
         ├── Offering / Package (optional)
         ├── Task[] / Checklist
@@ -44,8 +49,11 @@ A planned occasion owned by a workspace. Not inherently a wedding.
 | `status` | FSM: `draft` → `active` → `completed` / `archived` — see state machines |
 | `schedule` | See below |
 | `destination` | Optional **trip destination** (city/region/country + default timezone). Used for destination weddings/conferences |
-| `offering` | Selected package + extras (commercial metadata only in v1 — **no money ledger**) |
-| `stakeholders` | Decision-makers / hosts (not the full guest list) |
+| `offering` | Selected package + extras (quoted shape; **not** the ledger) |
+| `commercial` | Cost-plus / fee terms — see [budget-and-money.md](./budget-and-money.md) |
+| `budget`, `costs` | Plan vs spend |
+| `clientPayments`, `drawdowns` | Funds in + allocations out |
+| `stakeholders` | Decision-makers / hosts (not the full guest list); payers often stakeholders |
 | `parties`, `guests` | Attendance + hospitality |
 | `accommodationBlocks`, `stays`, `travelLegs`, `movements` | Logistics |
 | `transferPlans` | Optional waves grouping movements |
@@ -171,7 +179,19 @@ Workspace catalog (venues, hotels, transport, DMC, AV, catering, …). Assignmen
 
 ### Offering / package
 
-Commercial **metadata** attached to an event. **No payments, deposits, or invoices in v1** (explicitly deferred).
+Commercial **quote metadata** attached to an event (what was sold). Cash movement is **ClientPayment** + **Drawdown**; spend is **Cost**; plan is **Budget**. See [budget-and-money.md](./budget-and-money.md).
+
+### Budget, costs, payments, drawdowns
+
+First-class for cost-plus and retainer-style events:
+
+- **Budget / BudgetLine** — planned amounts by category  
+- **Cost** — estimated → committed → invoiced → paid  
+- **ClientPayment** — deposits and progress payments from the client  
+- **Drawdown** — allocate cleared funds against costs and/or fee  
+- **CommercialTerms** — cost-plus %, flat fee, hybrid  
+
+Not a full accounting suite (no GL). Confirmation-style recording of payments first; payment gateways optional later.
 
 ### Task & note
 
@@ -180,7 +200,7 @@ Commercial **metadata** attached to an event. **No payments, deposits, or invoic
 
 ### Documents & communications (deferred)
 
-Passport scans, contracts, email/SMS invite blasts — **out of v1** unless Hypeluxe pulls them forward. RSVP may be planner-entered.
+Passport scans, contracts, email/SMS invite blasts — **out of v1** unless Hypeluxe pulls them forward. RSVP may be planner-entered. (Money/budget is **not** deferred — see above.)
 
 ## Mapping from legacy TwoBeWed
 
@@ -189,7 +209,7 @@ Passport scans, contracts, email/SMS invite blasts — **out of v1** unless Hype
 | `user` | User + WorkspaceMember |
 | `client` (+ `weddingDate`) | `Event` + `Schedule` + stakeholders |
 | `vendor` | `Vendor` + assignments |
-| _(none)_ | Party, Guest, TravelLeg, Stay, Movement, AuditRecord |
+| _(none)_ | Party, Guest, TravelLeg, Stay, Movement, Budget, Cost, ClientPayment, Drawdown, AuditRecord |
 | `@twobewed.com` email rule | Tenant auth policy (not global) |
 
 ## Invariants
@@ -201,3 +221,4 @@ Passport scans, contracts, email/SMS invite blasts — **out of v1** unless Hype
 5. Status changes only via documented state-machine commands.
 6. Vertical language lives in templates/UI copy, not required core fields.
 7. Meaningful commands append audit records with offline-safe actor stamps.
+8. Posted drawdowns cannot exceed available client funds (cleared payments − posted drawdowns) without an explicit override; allocation sums must equal drawdown amount.

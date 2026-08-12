@@ -26,8 +26,9 @@ Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …
 4. **Travel & stays** — track inbound/outbound legs and stays against an accommodation block (confirmations, not GDS booking).
 5. **Transfers & local travel** — unified **movements** (`arrival` / `departure` / `local`); arrival pickups linked to flights; hotel↔venue shuttles.
 6. **Multi-day conference (platform proof)** — multi-day schedule units (sessions), delegate guest list, conference hotels, airport transfers, hotel↔venue shuttles — same schemas as destination wedding logistics.
-7. **Planner portfolio** — list/filter events by status and date; day-of logistics boards offline-capable; activity trail for attribution.
-8. **Vendor roster** — hotels, transport partners, venues reused across events.
+7. **Budget & cost-plus** — event budget, vendor costs, client deposits/progress payments, drawdowns against costs/fee; remaining client balance.
+8. **Planner portfolio** — list/filter events by status and date; day-of logistics boards offline-capable; activity trail for attribution.
+9. **Vendor roster** — hotels, transport partners, venues reused across events.
 
 ## Success for Hypeluxe pilot
 
@@ -35,6 +36,7 @@ Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …
 - Destination multi-day itineraries do not require fake “extra events”
 - Guest travel / hotel / movement gaps are visible without leaving the event
 - Conference-shaped logistics reuse the same guest + movement model
+- Cost-plus events show budget vs spend, payments in, drawdowns out, and balance
 - Status changes follow FSMs; actions are attributable (who changed what)
 - Switching UI language/templates does not require engineering changes to core schemas
 
@@ -43,7 +45,8 @@ Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …
 - Public couple-facing marketing site
 - Open ticket sales / marketplace
 - Automated airline or hotel **booking engines** (confirmation **tracking** is in scope)
-- Payments / deposits / invoicing
+- Full accounting/ERP (GL/tax) — event money tracking **is** in scope
+- Payment gateway required (manual payment recording first)
 - Document vault and email/SMS blast platform
 - Full seating-chart product (guest list + parties first)
 - Vendor self-serve portal (unless explicitly pulled forward)
