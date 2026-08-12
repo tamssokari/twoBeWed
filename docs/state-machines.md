@@ -166,8 +166,8 @@ Line edits allowed in `draft` / `active`; `locked` rejects line mutations (overr
 |---|---|---|---|
 | _(new)_ | `EstimateCost` | `estimated` | — |
 | `estimated` | `CommitCost` | `committed` | amount set |
-| `committed` | `InvoiceCost` | `invoiced` | — |
-| `invoiced` | `MarkCostPaid` | `paid` | — |
+| `committed` | `InvoiceCost` | `invoiced` | vendor invoice received by agency |
+| `invoiced` | `MarkCostPaid` | `paid` | agency paid vendor |
 | `estimated` \| `committed` \| `invoiced` | `CancelCost` | `cancelled` | — |
 
 Amounts may be updated via `ReviseCostAmounts` without changing status when still `estimated` / `committed` (audited).
@@ -178,9 +178,27 @@ Amounts may be updated via `ReviseCostAmounts` without changing status when stil
 |---|---|---|---|
 | _(new)_ | `RecordClientPayment` | `recorded` | amount &gt; 0 |
 | `recorded` | `ClearClientPayment` | `cleared` | — |
-| `recorded` \| `cleared` | `ReverseClientPayment` | `reversed` | no posted drawdowns depend on it **or** override |
+| `recorded` \| `cleared` | `ReverseClientPayment` | `reversed` | applications voided/reversed **or** override |
 
 `cleared` counts toward available funds for drawdowns (tenant may treat `recorded` as available — default: only `cleared`).
+
+`ApplyPaymentToInvoice` / `UnapplyPayment` are commands on applications (not payment status changes); they update invoice `amountApplied` / status.
+
+## ClientInvoiceLifecycle
+
+| From | Command | To | Guard |
+|---|---|---|---|
+| _(new)_ | `DraftClientInvoice` | `draft` | bill-to + ≥1 line; totals consistent |
+| `draft` | `IssueClientInvoice` | `issued` | number assigned; snapshot recommended |
+| `issued` | `ApplyPaymentToInvoice` (when partial) | `partially_paid` | application ≤ amountDue |
+| `issued` \| `partially_paid` | `ApplyPaymentToInvoice` (when covered) | `paid` | amountApplied ≥ total |
+| `partially_paid` \| `paid` | `UnapplyPayment` | `issued` \| `partially_paid` | recompute from applications |
+| `draft` \| `issued` \| `partially_paid` | `VoidClientInvoice` | `void` | no applications, or unapply first |
+| `issued` \| `partially_paid` | `WriteOffClientInvoice` | `written_off` | `owner` / `planner`; remaining A/R forgiven |
+
+`GenerateFinalInvoice` creates a `draft` (or issues directly per policy) from cost-plus obligation − prior issued totals.
+
+Do **not** edit line totals on `issued`+; use void + replacement or `adjustment` invoice.
 
 ## DrawdownLifecycle
 
@@ -232,4 +250,5 @@ const assignMovement = (id: MovementId, vehicleId: VehicleId) =>
 - Driver role for `StartMovement`, or planner-only in Hypeluxe pilot?
 - Client payment: do `recorded` funds count before `cleared`?
 - Drawdown basis against cost `committed` vs `actual`?
-- Can `host` see full cost-plus margins or only balance due?
+- Can `host` see full cost-plus margins or only their invoices / balance due?
+- Auto-issue deposit invoices from offering templates vs manual draft only?

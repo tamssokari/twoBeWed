@@ -71,9 +71,10 @@ State-machine commands declare required roles (Effect `Authz.require("planner")`
 | `AssignMovement` | `coordinator` |
 | `StartMovement` | `coordinator` (driver role TBD) |
 | `InviteGuest` | `planner` |
-| `RecordClientPayment` / `PostDrawdown` | `planner` |
+| `RecordClientPayment` / `ApplyPaymentToInvoice` / `PostDrawdown` | `planner` |
+| `DraftClientInvoice` / `IssueClientInvoice` / `VoidClientInvoice` | `planner` |
 | `LockBudget` / `ReviseCommercialTerms` | `planner` |
-| View cost-plus margins | `planner` / `owner` (host summary optional) |
+| View cost-plus margins | `planner` / `owner` (host: own invoices + balance optional) |
 
 Denied attempts may be security-logged; they do not create domain audit success rows.
 
@@ -91,8 +92,8 @@ When enabled: Guest record links `userId`; that user gets `guest` role **scoped 
 
 | Area | Stance |
 |---|---|
-| **Full accounting/ERP** | Event budget/cost-plus/payments/drawdowns are in scope; GL/tax/payroll are not |
-| **Payment gateway** | Optional later; record payments manually first |
+| **Full accounting/ERP** | Event budget/cost-plus/**client invoicing**/payments/drawdowns are in scope; GL/tax filing/payroll are not |
+| **Payment gateway** | Optional later; record + apply payments to invoices first |
 | **Documents** | No passport/contract vault in v1 (note as Hypeluxe follow-on) |
 | **Communications** | No built-in email/SMS blast in v1; RSVP may be planner-entered; intake channel TBD |
 | **Vendor login** | Not in pilot |

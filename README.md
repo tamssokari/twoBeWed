@@ -20,14 +20,14 @@ Build a fully functional, **event-agnostic** platform (single-day, multi-day, de
 - **Local-first** sync (offline-capable reads/writes)
 - **Continuous delivery** of a single shippable artifact
 - **Guest management + logistics** (travel, accommodations, pickups/dropoffs, local travel)
-- **Budgets, cost-plus, client payments, and drawdowns**
+- **Budgets, client invoicing, cost-plus, payments, and drawdowns**
 - **Hypeluxe** as the first customer / tenant use case (destination weddings as a vertical template, not the core domain)
 
 | Doc | Purpose |
 |---|---|
 | [docs/VISION.md](docs/VISION.md) | Product vision and principles |
 | [docs/domain-model.md](docs/domain-model.md) | Event-agnostic domain |
-| [docs/budget-and-money.md](docs/budget-and-money.md) | Cost-plus, payments, drawdowns |
+| [docs/budget-and-money.md](docs/budget-and-money.md) | Cost-plus, invoicing, payments, drawdowns |
 | [docs/state-machines.md](docs/state-machines.md) | Status FSMs and commands |
 | [docs/audit-and-attribution.md](docs/audit-and-attribution.md) | Who/when/what audit trail |
 | [docs/identity-and-access.md](docs/identity-and-access.md) | Users, parties, RBAC |

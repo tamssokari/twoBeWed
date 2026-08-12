@@ -6,13 +6,13 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 - [x] Vision, domain, architecture, Hypeluxe brief
 - [x] State machines, audit/attribution, identity/RBAC/Party
-- [x] Budget, cost-plus, client payments, drawdowns
+- [x] Budget, cost-plus, client invoices, payments, drawdowns
 - [ ] Create private repo under `machineaid` (requires org write access; blocked for this agent)
 - [ ] Point Cursor / CI at the new repo; treat these docs as the initial import
 
 ## Phase 1 — Domain skeleton
 
-- Effect Schema for Workspace, Member, Event, Schedule, Stakeholder, Party, Guest, TravelLeg, Stay, AccommodationBlock, Movement, Budget, Cost, ClientPayment, Drawdown, CommercialTerms, Vendor, VendorAssignment, Task, AuditRecord
+- Effect Schema for Workspace, Member, Event, Schedule, Stakeholder, Party, Guest, TravelLeg, Stay, AccommodationBlock, Movement, Budget, Cost, ClientInvoice, PaymentApplication, ClientPayment, Drawdown, CommercialTerms, Vendor, VendorAssignment, Task, AuditRecord
 - FSM modules + unit tests for illegal vs legal transitions (incl. money machines)
 - In-memory repos; `Audit` buffer in tests
 - Hypeluxe template JSON (destination wedding + sample multi-day conference)
@@ -42,20 +42,20 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 - Accommodation blocks/allotment, stays, movement plans (arrival/departure/local)
 - Arrival-day dispatcher views (offline-capable)
-- Budget sheet, costs, client payments, drawdowns, cost-plus balance widgets
+- Budget sheet, client invoices (draft/issue), costs, payments + apply to invoice, drawdowns, A/R + cash widgets
 - Tenant branding + destination wedding / gala templates + conference proof template
 - Vendor assignment flows (hotels, transport)
 
 ## Phase 5 — Continuous delivery hardening
 
 - Staging auto-deploy from main
-- Playwright: offline event create, multi-day edit, guest travel + movement assign, record payment + drawdown, sync + audit assert
+- Playwright: offline event create, multi-day edit, guest travel + movement assign, issue invoice + record payment, drawdown, sync + audit assert
 - Schema migration discipline (N−1 clients)
 
 ## Explicitly deferred (unless pulled forward)
 
-- Full GL / tax engine / accounting export polish
-- Payment gateway (manual payment recording first)
+- Full GL / tax engine / e-invoicing networks (simple PDF invoice export in scope)
+- Payment gateway (manual payment recording + apply first)
 - Document vault (passports, contracts)
 - Email/SMS communications platform
 - Guest self-serve portal (model allows; pilot may stay planner-only)
@@ -72,4 +72,5 @@ Effort is described by **subsystem scope**, not calendar duration.
 7. Driver role for `StartMovement` vs planner/coordinator only
 8. Payment funds available at `recorded` vs only `cleared`?
 9. Drawdown against cost `committed` vs `actual`?
-10. Host visibility of margins vs balance-only?
+10. Host visibility of margins vs invoices/balance-only?
+11. Auto-issue deposit invoices from offering templates?

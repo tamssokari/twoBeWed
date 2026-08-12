@@ -21,10 +21,10 @@ This is separate from calendar/schedule “events.” Here **audit** records **d
 
 | Audited | Examples |
 |---|---|
-| State-machine commands | `AcceptRsvp`, `AssignMovement`, `ConfirmStay`, `PublishEvent`, `PostDrawdown`, `RecordClientPayment` |
-| Structured field updates on aggregates | guest contact change, travel times, confirmation codes, cost amounts, markup % |
+| State-machine commands | `AcceptRsvp`, `AssignMovement`, `ConfirmStay`, `PublishEvent`, `IssueClientInvoice`, `ApplyPaymentToInvoice`, `PostDrawdown`, `RecordClientPayment` |
+| Structured field updates on aggregates | guest contact change, travel times, confirmation codes, cost amounts, markup %, invoice lines (draft only) |
 | Sync outcomes | command `rejected` / `conflict` with reason |
-| Authz failures (optional, security log) | denied `AssignMovement` / `PostDrawdown` |
+| Authz failures (optional, security log) | denied `AssignMovement` / `IssueClientInvoice` / `PostDrawdown` |
 
 | Not audited (v1) | Examples |
 |---|---|
