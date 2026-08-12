@@ -10,6 +10,7 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | D-002 | **Authn: SSO / passwordless out of the gate** | 2026-08-12 | Avoid rolling our own MFA; use IdP / passwordless provider factors |
 | D-003 | **Hosting: machineaid product** | 2026-08-12 | machineaid operates staging/prod; Hypeluxe is a tenant/customer |
 | D-004 | **Policy: `allowLogisticsBeforeRsvp` = false** | 2026-08-12 | Hypeluxe default: logistics only when GuestRsvp is `attending` |
+| D-005 | **Policy: `requireFlightLinkForAirportPickup` = true** | 2026-08-12 | Arrival airport pickups must link a TravelLeg before AssignMovement |
 
 ## Open (need input)
 
@@ -23,7 +24,6 @@ Working decisions for the event platform. Prefer short entries here; promote to 
 | O-006 | Seating / floor plans | out / thin wedge |
 | O-007 | Documents | out / upload+tag only |
 | O-008 | Notifications | out / in-app only |
-| O-010 | `requireFlightLinkForAirportPickup` | yes / no |
 | O-011 | Drawdown funds | `recorded` / `cleared` |
 | O-012 | Drawdown cost basis | `committed` / `actual` |
 | O-013 | Auto-draft deposit invoice | yes / no |

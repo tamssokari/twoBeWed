@@ -68,7 +68,7 @@ Invitation / attendance machine for a guest. Separate from travel/stay/transfer 
 
 **Removed vs earlier draft:** bare `responded` is not a state — acceptance/decline/waitlist *are* the response.
 
-**Logistics policy:** creating/assigning stays and arrival transfers typically requires `attending` (guard). Planners may still capture draft travel while `invited` if the tenant pack allows (`allowLogisticsBeforeRsvp`).
+**Logistics policy:** creating/assigning stays and arrival movements requires GuestRsvp `attending` (Hypeluxe default: `allowLogisticsBeforeRsvp = false`, D-004).
 
 ---
 
@@ -121,7 +121,7 @@ Inbound/outbound long-haul (or intercity) legs.
 | `assigned` | `UnassignMovement` | `planned` | clears vehicle/vendor |
 | `cancelled` \| `no_show` | `PlanMovement` | `planned` | re-open same record or new id |
 
-**Linking:** arrival movements may require `linkedTravelLegId` when tenant policy `requireFlightLinkForAirportPickup` is on.
+**Linking:** arrival airport pickups require `linkedTravelLegId` before `AssignMovement` (Hypeluxe default: `requireFlightLinkForAirportPickup = true`, D-005). Local/departure movements are unaffected unless policy says otherwise.
 
 ---
 
