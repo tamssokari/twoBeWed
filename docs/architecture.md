@@ -28,8 +28,8 @@ Use Effect on client and server for:
 | Concern | Approach |
 |---|---|
 | Domain use cases | Effect programs with typed errors (`Unauthorized`, `Conflict`, `Validation`, `SyncConflict`) |
-| Dependencies | Service interfaces (`EventRepo`, `VendorRepo`, `Auth`, `Clock`) provided via Layers |
-| Schema | Shared Effect Schema for Event, Schedule, Vendor, etc. |
+| Dependencies | Service interfaces (`EventRepo`, `GuestRepo`, `LogisticsRepo`, `VendorRepo`, `Auth`, `Clock`) provided via Layers |
+| Schema | Shared Effect Schema for Event, Schedule, Guest, TravelLeg, Stay, Transfer, Vendor, etc. |
 | Config | Effect Config for env (no scattered `process.env` reads) |
 | HTTP / RPC | `@effect/platform` (or Effect RPC) composing the same domain layers |
 
@@ -37,7 +37,7 @@ UI components call Effect services only — no ad-hoc `fetch` for domain writes.
 
 ## Local-first data plane
 
-**Default recommendation:** SQL-oriented sync (e.g. ElectricSQL or PowerSync) with client SQLite/IndexedDB and Postgres as durable source of truth — good fit for structured events, vendors, and assignments.
+**Default recommendation:** SQL-oriented sync (e.g. ElectricSQL or PowerSync) with client SQLite/IndexedDB and Postgres as durable source of truth — good fit for structured events, guests, travel/stay/transfer rows, vendors, and assignments.
 
 **Hybrid for collaboration:** notes/checklists may use CRDT (Automerge/Loro) or explicit LWW + history if multi-device concurrent editing is required.
 

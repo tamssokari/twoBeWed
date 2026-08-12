@@ -14,12 +14,13 @@ See [docs/legacy-prototype.md](docs/legacy-prototype.md) for a short map of the 
 
 ## Target direction
 
-Build a fully functional, **event-agnostic** platform (single-day, multi-day, and related schedule shapes) using:
+Build a fully functional, **event-agnostic** platform (single-day, multi-day, destination, conference) using:
 
 - **EffectTS** as the application spine
 - **Local-first** sync (offline-capable reads/writes)
 - **Continuous delivery** of a single shippable artifact
-- **Hypeluxe** as the first customer / tenant use case (weddings and luxury events as a vertical template, not the core domain)
+- **Guest management + logistics** (travel, accommodations, pickups/dropoffs, local travel)
+- **Hypeluxe** as the first customer / tenant use case (destination weddings as a vertical template, not the core domain)
 
 | Doc | Purpose |
 |---|---|

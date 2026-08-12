@@ -10,17 +10,18 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 ## Phase 1 — Domain skeleton
 
-- Effect Schema for Workspace, Event, Schedule (`single_day` | `multi_day`), Vendor, Stakeholder
-- In-memory repos + unit tests for create/update event schedule
-- Hypeluxe template JSON (event types + sample checklist) with no UI yet
+- Effect Schema for Workspace, Event, Schedule (`single_day` | `multi_day`), Stakeholder, Guest, TravelLeg, Stay, AccommodationBlock, Transfer / LocalMove, Vendor
+- In-memory repos + unit tests for schedule edits and guest logistics attachments
+- Hypeluxe template JSON (destination wedding + sample multi-day conference) with no UI yet
 
-**Risk:** locking schedule shape too early — validate with Hypeluxe single- and multi-day examples.
+**Risk:** locking schedule + logistics shapes too early — validate with destination wedding *and* conference examples.
 
 ## Phase 2 — Local client shell
 
 - App shell with local DB
 - Auth screens + event list/detail (local-only)
 - Schedule editor for single-day and multi-day
+- Guest list CRUD + RSVP status (local-only)
 
 **Depends on:** Phase 1 schemas stable enough for migrations.
 
@@ -28,20 +29,21 @@ Effort is described by **subsystem scope**, not calendar duration.
 
 - Choose SQL-sync vs hybrid CRDT
 - Cloud auth + workspace membership
-- Offline mutate → online sync smoke in CI
+- Offline mutate → online sync smoke in CI (include a guest + travel leg)
 
-**Risk:** conflict UX; keep structured fields simple (LWW/row version) before CRDT notes.
+**Risk:** conflict UX; keep structured logistics fields simple (LWW/row version) before CRDT notes.
 
-## Phase 4 — Hypeluxe vertical pack
+## Phase 4 — Logistics boards + Hypeluxe pack
 
-- Tenant branding + wedding/gala templates
-- Package catalog + vendor assignment flows
-- Day-of planner checklist
+- Accommodation blocks, stays, pickup/dropoff plans, local shuttles
+- Arrival-day and transfer dispatcher-style views (offline-capable)
+- Tenant branding + destination wedding / gala templates + conference proof template
+- Package catalog + vendor assignment flows (hotels, transport)
 
 ## Phase 5 — Continuous delivery hardening
 
 - Staging auto-deploy from main
-- Playwright: offline event create, multi-day edit, sync assert
+- Playwright: offline event create, multi-day edit, guest travel + pickup assign, sync assert
 - Schema migration discipline (N−1 clients)
 
 ## Open decisions
@@ -49,4 +51,5 @@ Effort is described by **subsystem scope**, not calendar duration.
 1. Repository name under `machineaid` (e.g. `event-ops`)
 2. Sync stack (Electric / PowerSync / CRDT hybrid)
 3. Frontend framework (React vs Solid) given Effect interop preference
-4. Whether guest/stakeholder portal is in the Hypeluxe pilot
+4. Whether a guest-facing itinerary portal is in the Hypeluxe pilot (planner-only logistics first is viable)
+5. Shared `Movement` type vs separate Transfer / LocalMove models

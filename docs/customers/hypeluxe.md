@@ -2,35 +2,45 @@
 
 ## Role
 
-**Hypeluxe is the first customer use case**, not the name of the platform. They exercise the event-agnostic core through a tenant pack focused on luxury weddings and high-touch celebrations — including single-day and multi-day itineraries.
+**Hypeluxe is the first customer use case**, not the name of the platform. They exercise the event-agnostic core through a tenant pack focused on luxury and destination celebrations — including single-day, multi-day, and **destination** itineraries with full guest logistics.
+
+The same core also has to prove it can express **multi-day conferences** (even if Hypeluxe’s primary vertical is weddings/celebrations), so templates stay data-driven.
 
 ## What “tenant pack” means
 
 | Deliverable | Examples for Hypeluxe |
 |---|---|
 | Branding | Logo, color tokens, email/product copy |
-| Event type templates | Luxury wedding, rehearsal dinner weekend, private gala |
-| Default checklists | Vendor booking, timeline lock, day-of run of show |
+| Event type templates | Destination wedding, wedding weekend, private gala; sample **multi-day conference** template for platform validation |
+| Default checklists | Vendor booking, room-block lock, arrival manifest, timeline lock, day-of run of show |
 | Package catalog | Main offerings + extras Hypeluxe sells |
-| Roles / language | Planner, couple, family liaison (labels only) |
+| Roles / language | Planner, couple, family liaison, VIP guest (labels only) |
 
-Core storage remains `Event` + `Schedule` + `Vendor` + …; Hypeluxe configures how those feel in the product.
+Core storage remains `Event` + `Schedule` + `Guest` + logistics + `Vendor` + …; Hypeluxe configures how those feel in the product.
 
 ## Use cases to support first
 
-1. **Single-day wedding** — one primary date, time blocks (getting ready → ceremony → reception), vendor assignments, planner notes offline on-site.
-2. **Multi-day celebration** — welcome dinner, main day, farewell brunch as separate schedule units with venues.
-3. **Planner portfolio** — list/filter Hypeluxe events by status and date range (synced across devices).
-4. **Vendor roster** — workspace catalog reused across events.
+1. **Single-day wedding** — one primary date, time blocks, vendors, on-site notes offline.
+2. **Multi-day / destination wedding** — welcome → main day → farewell as schedule units; guests flying in; hotel room block; airport pickups/dropoffs; local shuttles between hotel and venues.
+3. **Guest management** — invite/RSVP status, parties/+1s, tags (VIP), dietary/accessibility; planner filters for “missing inbound flight” / “no hotel” / “unassigned pickup”.
+4. **Travel & stays** — track inbound/outbound legs and stays against an accommodation block (confirmations, not GDS booking).
+5. **Transfers & local travel** — arrival pickups linked to flights; departure dropoffs; local venue loops.
+6. **Multi-day conference (platform proof)** — multi-day schedule units (sessions), delegate guest list, conference hotels, airport transfers, hotel↔venue shuttles — same schemas as destination wedding logistics.
+7. **Planner portfolio** — list/filter events by status and date; day-of logistics boards offline-capable.
+8. **Vendor roster** — hotels, transport partners, venues reused across events.
 
 ## Success for Hypeluxe pilot
 
-- Planner can run day-of with poor connectivity and reconcile later
-- Multi-day itineraries do not require fake “extra events”
+- Planner can run arrival day and day-of with poor connectivity and reconcile later
+- Destination multi-day itineraries do not require fake “extra events”
+- Guest travel / hotel / transfer gaps are visible without leaving the event
+- Conference-shaped logistics reuse the same guest + movement model
 - Switching UI language/templates does not require engineering changes to core schemas
 
 ## Out of scope for pilot
 
 - Public couple-facing marketing site
-- Full guest RSVP / seating product
+- Open ticket sales / marketplace
+- Automated airline or hotel booking engines (track confirmations only)
+- Full seating-chart product (guest list + parties first)
 - Vendor self-serve portal (unless explicitly pulled forward)
