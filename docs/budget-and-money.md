@@ -10,9 +10,20 @@ This is **in scope** for the platform domain. It is **not** a full accounting/ER
 2. **Cost tracking** (estimated vs committed vs actual) tied to vendors/categories
 3. **Cost-plus commercial terms** on the event (markup %, flat producer fee, hybrid)
 4. **Client invoices** issued to the payer (deposit, progress, final / reconciliation)
-5. **Client payments** received and **applied** to invoices
-6. **Drawdowns** — allocating received client funds against costs / fee
-7. Planner visibility: billed vs collected, A/R, remaining client balance, burn vs budget
+5. **Client payments** received and **applied** to invoices (`recorded` claim → `cleared` receipt)
+6. **Drawdowns** — planner control: allocate **cleared** milestone funds against costs with **actual**, so spend does not outrun collections or budget
+7. **Day-of cash** — separate float for coordinators (D-010)
+8. Planner visibility: billed vs collected, A/R, drawdowns vs budget, remaining funds
+
+## Money facades (module API)
+
+| Facade | Commands (examples) | Who |
+|---|---|---|
+| `Billing` | Draft/Issue invoice, Record/Apply payment | planner, owner |
+| `ClientFunds` | ClearPayment, PostDrawdown, VoidDrawdown | planner, owner |
+| `DayOfCash` | IssueFloat, RecordPayout, Reconcile | coordinator, planner |
+
+v1: Billing + ClientFunds are **online-authoritative**; DayOfCash is **local-first**. See [v1-slice.md](./v1-slice.md).
 
 ## Non-goals (still deferred)
 

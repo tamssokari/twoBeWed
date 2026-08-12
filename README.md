@@ -4,6 +4,18 @@ This repository currently contains **TwoBeWed**, an early MEAN-stack prototype f
 
 **Intended home:** a new private repository under the [`machineaid`](https://github.com/machineaid) GitHub organization (not creatable from this agent’s GitHub token). Until that repo exists, documentation lives here as PRs.
 
+## Start here
+
+| If you want… | Read |
+|---|---|
+| What we ship first | [docs/v1-slice.md](docs/v1-slice.md) |
+| What’s decided vs open | [docs/decisions.md](docs/decisions.md) |
+| Why the approach was compressed | [docs/design-revisions.md](docs/design-revisions.md) |
+| Domain / money / FSMs (reference) | domain-model, budget-and-money, state-machines |
+| Next build phases | [docs/roadmap.md](docs/roadmap.md) |
+
+**Next concrete step outside docs:** create the `machineaid` repo, import these docs, start Phase 1 schemas against the v1 slice. Still need stack calls (O-001…O-003) before Phase 2–3 spike.
+
 ## Current prototype (legacy)
 
 - **Stack:** MongoDB, Express, AngularJS, Node.js

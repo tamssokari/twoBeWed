@@ -30,12 +30,13 @@ Hard-coding “wedding date” and “couple” as the center of the model block
 8. **Local-first UX** — Reads and writes hit a local store first; sync is background. Venue Wi‑Fi and travel days are unreliable; the product must still work.
 9. **EffectTS everywhere it matters** — Typed errors, composable services, and swappable Layers for local DB, sync, and auth.
 10. **Functional core / imperative shell** — Domain decisions in a pure core; I/O and frameworks only in shells ([platform-engineering.md](./platform-engineering.md)).
-11. **Policy as data** — Tenant/workspace rules are versioned documents evaluated by the core, not hard-coded tenant branches.
-12. **Continuous delivery** — Main always produces a deployable artifact; staging smoke must pass before prod promote.
-13. **Observability** — Traces, metrics, structured logs, correlated with audit via `correlationId`.
-14. **Multi-tenant by design** — Hypeluxe is customer #1, not the product name. Branding, roles, policy packs, and event-type templates are tenant-scoped. **machineaid** owns and hosts the product.
+11. **Policy as data** — v1: flat Hypeluxe `ResolvedPolicy`; generalize merge when a second tenant needs it.
+12. **Continuous delivery** — Main always produces a deployable artifact; staging smoke = v1 journeys before prod promote.
+13. **Observability** — correlationId + structured logs first; deeper OTel as the slice stabilizes.
+14. **Multi-tenant by design** — Hypeluxe is customer #1; **machineaid** owns and hosts the product.
 15. **SSO / passwordless auth** — Prefer IdP SSO and passwordless; do not roll custom MFA ([security-and-compliance.md](./security-and-compliance.md)).
 16. **PIPEDA + GDPR** — Privacy and retention designed for both.
+17. **v1 complexity budget** — Ship the Hypeluxe slice ([v1-slice.md](./v1-slice.md)); platform breadth waits on evidence.
 
 ## Who it’s for
 
