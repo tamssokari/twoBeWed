@@ -205,7 +205,7 @@ Do **not** edit line totals on `issued`+; use void + replacement or `adjustment`
 | From | Command | To | Guard |
 |---|---|---|---|
 | _(new)_ | `DraftDrawdown` | `pending` | allocations sum = amount |
-| `pending` | `PostDrawdown` | `posted` | funds available (payments − posted drawdowns) ≥ amount; cost caps |
+| `pending` | `PostDrawdown` | `posted` | funds available (cleared payments − posted drawdowns) ≥ amount; each cost allocation ≤ cost.`actual` (D-006/D-007) |
 | `pending` \| `posted` | `VoidDrawdown` | `void` | `posted` void restores availability |
 
 ## CommercialTerms

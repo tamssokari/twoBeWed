@@ -107,14 +107,14 @@ type Cost = {
   label: string
   estimated?: Money
   committed?: Money          // PO / contract
-  actual?: Money             // vendor-invoice / receipted
+  actual?: Money             // vendor invoice/receipt **received** (D-007 basis for drawdowns)
   status: "estimated" | "committed" | "invoiced" | "paid" | "cancelled"
   confirmationRef?: string   // vendor invoice #
   incurredOn?: Date
 }
 ```
 
-`Cost.status = invoiced` means **the vendor invoiced the agency**, not that the client was billed.
+`Cost.status = invoiced` means **the vendor invoiced the agency**, not that the client was billed. Setting `actual` reflects the amount on that received vendor invoice/receipt.
 
 ## Client invoices (agency → client)
 
